@@ -14,6 +14,8 @@ MOC_DIR = moc
 RCC_DIR = rcc
 UI_DIR  = ui
 
+INCLUDEPATH += $$PWD/include
+
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp
