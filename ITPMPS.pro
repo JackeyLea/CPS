@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,13 +18,17 @@ OBJECTS_DIR = objs
 INCLUDEPATH += $$PWD/include
 
 SOURCES += \
+    src/dbhandler.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/widgetlogin.cpp
+    src/widgetlogin.cpp \
+    src/sha512.cpp
 
 HEADERS += \
+    include/dbhandler.h \
     include/mainwindow.h \
-    include/widgetlogin.h
+    include/widgetlogin.h \
+    include/sha512.h
 
 FORMS += \
     ui/mainwindow.ui \
