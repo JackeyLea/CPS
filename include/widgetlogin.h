@@ -15,6 +15,13 @@ public:
     explicit WidgetLogin(QWidget *parent = nullptr);
     ~WidgetLogin();
 
+private slots:
+    void on_btnCancer_clicked();
+
+    void on_btnLogin_clicked();
+
+    void on_btnRegister_clicked();
+
 private:
     Ui::WidgetLogin *ui;
 };
