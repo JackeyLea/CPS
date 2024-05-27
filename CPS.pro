@@ -18,6 +18,7 @@ OBJECTS_DIR = objs
 INCLUDEPATH += $$PWD/include
 
 SOURCES += \
+    src/chapterexercise.cpp \
     src/chapterexercisesetup.cpp \
     src/dbhandler.cpp \
     src/main.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     src/sha512.cpp
 
 HEADERS += \
+    include/chapterexercise.h \
     include/chapterexercisesetup.h \
     include/dbhandler.h \
     include/mainwindow.h \
@@ -33,6 +35,7 @@ HEADERS += \
     include/sha512.h
 
 FORMS += \
+    ui/chapterexercise.ui \
     ui/chapterexercisesetup.ui \
     ui/mainwindow.ui \
     ui/widgetlogin.ui

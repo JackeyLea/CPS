@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+class ChapterExercise;
+
 namespace Ui {
 class ChapterExerciseSetup;
 }
@@ -15,8 +17,20 @@ public:
     explicit ChapterExerciseSetup(QWidget *parent = nullptr);
     ~ChapterExerciseSetup();
 
+protected:
+    void initUI();
+
+private slots:
+    void on_comboBoxSubject_currentIndexChanged(QString text);
+
+    void on_btnConfirm_clicked();
+
+    void on_btnCancer_clicked();
+
 private:
     Ui::ChapterExerciseSetup *ui;
+
+    ChapterExercise *ce;
 };
 
 #endif // CHAPTEREXERCISESETUP_H

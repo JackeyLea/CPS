@@ -24,6 +24,12 @@ public:
 
     bool regis(QString name,QString pwd);
 
+    int getSubjectID(QString subject);
+    int getChapterID(int subjectID,QString chapter);
+
+    QStringList getSubjectList();
+    QStringList getChapterList(QString subject);
+
 protected:
     void connect2db();
 

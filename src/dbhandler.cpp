@@ -27,6 +27,8 @@ bool DBHandler::login(QString name, QString pwd)
 {
     bool r = false;
 
+    if(name.isEmpty() || pwd.isEmpty()) return r;
+
     if(m_db.isOpen()){
         QString sql = QString("select id from users where name='%1' and pwd='%2';")
                           .arg(name,pwd);
@@ -47,6 +49,9 @@ bool DBHandler::login(QString name, QString pwd)
 bool DBHandler::regis(QString name, QString pwd)
 {
     bool r=false;
+
+    if(name.isEmpty() || pwd.isEmpty()) return r;
+
     int id = -1;
     //先查询此用户和密码是否存在
     QString sql;
@@ -69,6 +74,88 @@ bool DBHandler::regis(QString name, QString pwd)
     }else{
         qDebug()<<"[ERROR] User exists.";
     }
+
+    return r;
+}
+
+int DBHandler::getSubjectID(QString subject)
+{
+    int id=-1;
+
+    if(subject.isEmpty()) return id;
+
+    if(m_db.isOpen()){
+        QString sql = QString("select id from subject where name='%1'").arg(subject);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                id = m_query.value("id").toInt();
+            }
+        }
+    }
+
+    return id;
+}
+
+int DBHandler::getChapterID(int subjectID, QString chapter)
+{
+    int id=-1;
+
+    if(chapter.isEmpty() || (subjectID==-1)) return id;
+
+    if(m_db.isOpen()){
+        QString sql = QString("select id from chapter where subject=%1 and name='%2'")
+                          .arg(subjectID).arg(chapter);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                id = m_query.value("id").toInt();
+            }
+        }
+    }
+
+    return id;
+}
+
+QStringList DBHandler::getSubjectList()
+{
+    QStringList r;
+
+    if(m_db.isOpen()){
+        QString sql = "select name from subject;";
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                r.append(m_query.value("name").toString());
+            }
+        }
+    }
+
+    return r;
+}
+//获取指定科目对应的章节
+QStringList DBHandler::getChapterList(QString subject)
+{
+    QStringList r;
+
+    if(subject.isEmpty()) return r;
+
+    if(m_db.isOpen()){
+        //获取科目Id
+        int id = getSubjectID(subject);
+        qDebug()<<id;
+
+        if(id==-1){
+            return r;
+        }
+
+        QString sql = QString("select name from chapter where subject=%1").arg(id);
+        qDebug()<<sql;
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                r.append(m_query.value("name").toString());
+            }
+        }
+    }
+
+    qDebug()<<r;
 
     return r;
 }
