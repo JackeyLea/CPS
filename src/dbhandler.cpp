@@ -1,6 +1,7 @@
 #include "dbhandler.h"
 
 #include <QMessageBox>
+#include <QDebug>
 
 DBHandler* DBHandler::s_instance = nullptr;
 
@@ -22,7 +23,7 @@ DBHandler *DBHandler::instance()
     return s_instance;
 }
 
-bool DBHandler::login(QString name, QString pwd, int &id)
+bool DBHandler::login(QString name, QString pwd)
 {
     bool r = false;
 
@@ -31,7 +32,6 @@ bool DBHandler::login(QString name, QString pwd, int &id)
                           .arg(name,pwd);
         if(m_query.exec(sql)){
             while(m_query.next()){
-                id = m_query.value("id").toInt();
                 r=true;
             }
         }else{
@@ -47,13 +47,24 @@ bool DBHandler::login(QString name, QString pwd, int &id)
 bool DBHandler::regis(QString name, QString pwd)
 {
     bool r=false;
-    int id = 0;
-    if(!login(name,pwd,id)){
+    int id = -1;
+    //先查询此用户和密码是否存在
+    QString sql;
+    sql = QString("select max(id) from users;");
+    if(m_query.exec(sql)){
+        while(m_query.next()){
+            id = m_query.value("max(id)").toInt();
+        }
+    }
+    //插入数据
+    if(!login(name,pwd)){
         QString sql = QString("insert into users (id,name,pwd) VALUES (%1,'%2','%3');")
                           .arg(id+1).arg(name,pwd);
         if(m_query.exec(sql)){
             qDebug()<<"[Info] Add one new user.";
             r=true;
+        }else{
+            qDebug()<<"[ERROR] Cannot add new user."<<m_query.lastError();
         }
     }else{
         qDebug()<<"[ERROR] User exists.";

@@ -20,7 +20,7 @@ public:
 
     static DBHandler* instance();
 
-    bool login(QString name,QString pwd,int &id);
+    bool login(QString name, QString pwd);
 
     bool regis(QString name,QString pwd);
 
