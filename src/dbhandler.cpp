@@ -131,25 +131,56 @@ QStringList DBHandler::getSubjectList()
     return r;
 }
 //获取指定科目对应的章节
-QStringList DBHandler::getChapterList(QString subject)
+QStringList DBHandler::getChapterList(int subjectID)
 {
     QStringList r;
 
-    if(subject.isEmpty()) return r;
+    if(subjectID==-1) return r;
 
     if(m_db.isOpen()){
-        //获取科目Id
-        int id = getSubjectID(subject);
-
-        if(id==-1){
-            return r;
-        }
-
-        QString sql = QString("select name from chapter where subject=%1").arg(id);
+        QString sql = QString("select name from chapter where subject=%1").arg(subjectID);
         if(m_query.exec(sql)){
             while(m_query.next()){
                 r.append(m_query.value("name").toString());
             }
+        }
+    }
+
+    return r;
+}
+
+bool DBHandler::insertQuestion(int subjectID,int chapterID,
+                               QString desc,QString a,QString b,QString c,QString d,
+                               QString answer,QString detail)
+{
+    bool r=false;
+    if(m_db.isOpen()){
+        // TODO 重复判断 描述权重占比45% abcd各占10% 答案占5% 答案解析占5%
+        //获取最大id
+        int id = -1;
+        QString sql = QString("select max(id) from questions;");
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                id = m_query.value("max(id)").toInt();
+            }
+        }
+        sql = QString("insert into questions (id,subject,chapter,desc,a,b,c,d,answer,explain) "
+                              "VALUES (:id,:subject,:chapter,:desc,:a,:b,:c,:d,:answer,:explain);");
+        m_query.prepare(sql);
+        m_query.bindValue(":id",id+1);
+        m_query.bindValue(":subject",subjectID);
+        m_query.bindValue(":chapter",chapterID);
+        m_query.bindValue(":desc",desc);
+        m_query.bindValue(":a",a);
+        m_query.bindValue(":b",b);
+        m_query.bindValue(":c",c);
+        m_query.bindValue(":d",d);
+        m_query.bindValue(":answer",answer);
+        m_query.bindValue(":explain",detail);
+        if(!m_query.exec()){
+            qDebug()<<"[ERROR] DBHandler::insertQuestion: Cannot insert new data into db."<<m_query.lastError();
+        }else{
+            r=true;
         }
     }
 

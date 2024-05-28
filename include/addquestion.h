@@ -15,6 +15,17 @@ public:
     explicit AddQuestion(QWidget *parent = nullptr);
     ~AddQuestion();
 
+    void initUI();
+
+private slots:
+    void on_comboBoxSubject_currentTextChanged(const QString &text);
+
+    void on_btnAdd_clicked();
+
+    void on_btnClear_clicked();
+
+    void on_btnCancer_clicked();
+
 private:
     Ui::AddQuestion *ui;
 };

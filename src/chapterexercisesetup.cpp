@@ -31,7 +31,8 @@ void ChapterExerciseSetup::initUI()
 //根据选择的不同科目显示不同的章节
 void ChapterExerciseSetup::on_comboBoxSubject_currentIndexChanged(QString text)
 {
-    QStringList chapters = DBHandler::instance()->getChapterList(text);
+    int subjectID = DBHandler::instance()->getSubjectID(text);
+    QStringList chapters = DBHandler::instance()->getChapterList(subjectID);
     ui->comboBoxChapter->clear();
     ui->comboBoxChapter->addItems(chapters);
 }

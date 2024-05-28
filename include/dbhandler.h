@@ -28,7 +28,9 @@ public:
     int getChapterID(int subjectID,QString chapter);
 
     QStringList getSubjectList();
-    QStringList getChapterList(QString subject);
+    QStringList getChapterList(int subjectID);
+
+    bool insertQuestion(int subjectID, int chapterID, QString desc, QString a, QString b, QString c, QString d, QString answer, QString detail);
 
 protected:
     void connect2db();
