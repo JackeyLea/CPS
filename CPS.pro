@@ -28,6 +28,7 @@ SOURCES += \
     src/sha512.cpp
 
 HEADERS += \
+    include/icd.h \
     include/addquestion.h \
     include/chapterexercise.h \
     include/chapterexercisesetup.h \
