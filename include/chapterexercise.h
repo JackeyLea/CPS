@@ -2,6 +2,9 @@
 #define CHAPTEREXERCISE_H
 
 #include <QWidget>
+#include <QMap>
+
+class QButtonGroup;
 
 namespace Ui {
 class ChapterExercise;
@@ -25,10 +28,21 @@ public:
     void clearOptionStatus();
 
     void showQuestionWithSCID(int subject,int chapter,int id);
+    void updateProcessBar();
+
+    void optionChoosed(QString option);
 private slots:
     void on_btnPrevious_clicked();
 
     void on_btnNext_clicked();
+
+    void on_radioBtnA_clicked();
+
+    void on_radioBtnB_clicked();
+
+    void on_radioBtnC_clicked();
+
+    void on_radioBtnD_clicked();
 
 private:
     Ui::ChapterExercise *ui;
@@ -41,6 +55,8 @@ private:
     int m_iDoneCnt;//当前已完成题数
     int m_iChapterQCnt;//当前章节总题数
     bool m_bIsContinue;
+    QButtonGroup *m_bgBtns;//用于显示状态的按钮
+    QMap<int,QString> m_mQDoneMap;//统计已答题数据
 };
 
 #endif // CHAPTEREXERCISE_H

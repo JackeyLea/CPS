@@ -73,19 +73,16 @@ void ChapterExercise::initUI()
     }
 
     //位于左侧的题目状态显示界面
-    QButtonGroup btnGrp(ui->frameNav);
+    m_bgBtns = new QButtonGroup(ui->frameNav);
     for(int i=0;i<m_iChapterQCnt;i++){
         QPushButton *btn=new QPushButton(ui->frameNav);
         btn->setText(QString("%1").arg(i+1));
         btn->setGeometry(10+(i%5)*35,10+(i/5)*35,25,25);
         btn->setStyleSheet(QString("border:1px solid gray;background-color:gray;"));
-        btnGrp.addButton(btn);
+        m_bgBtns->addButton(btn,i);
     }
 
-    //完成计数
-    if(m_iChapterQCnt!=0){
-        ui->progressBar->setValue(m_iDoneCnt / m_iChapterQCnt);
-    }
+    updateProcessBar();//进度条
 
     //显示问题信息
     showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
@@ -132,6 +129,25 @@ void ChapterExercise::showQuestionWithSCID(int subject, int chapter, int id)
     ui->labelC->setText(q.c);
     ui->labelD->setText(q.d);
 }
+//更新进度条
+void ChapterExercise::updateProcessBar()
+{
+    //完成计数
+    if(m_iChapterQCnt!=0){
+        ui->progressBar->setValue((m_iDoneCnt*1.0 / m_iChapterQCnt)*100);
+    }
+}
+
+void ChapterExercise::optionChoosed(QString option)
+{
+    //如果某一题的答案中的任意一个选项被点击了
+    if(!m_mQDoneMap.contains(m_iQuestionID)){
+        m_mQDoneMap.insert(m_iQuestionID,option);
+        m_iDoneCnt++;
+        m_bgBtns->button(m_iQuestionID-m_iMinQuestionID)->setStyleSheet("border:1px solid green;\nbackground-color: green;");
+    }
+    updateProcessBar();
+}
 
 void ChapterExercise::on_btnPrevious_clicked()
 {
@@ -147,5 +163,25 @@ void ChapterExercise::on_btnNext_clicked()
     m_iQuestionID +=1;
     showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
     checkPreviouseNext();
+}
+
+void ChapterExercise::on_radioBtnA_clicked()
+{
+    optionChoosed(QString("A"));
+}
+
+void ChapterExercise::on_radioBtnB_clicked()
+{
+    optionChoosed(QString("B"));
+}
+
+void ChapterExercise::on_radioBtnC_clicked()
+{
+    optionChoosed(QString("C"));
+}
+
+void ChapterExercise::on_radioBtnD_clicked()
+{
+    optionChoosed(QString("D"));
 }
 
