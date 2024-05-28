@@ -33,7 +33,8 @@ public:
     QStringList getChapterList(int subjectID);
 
     int getQCntSubjectChapter(int subjectID,int chapterID);
-    int getQIDSubjectChapter(int subjectID,int chapterID);
+    int getMinQIDSubjectChapter(int subjectID,int chapterID);
+    int getMaxQIDSubjectChapter(int subjectID,int chapterID);
 
     bool insertQuestion(int subjectID, int chapterID, QString desc, QString a, QString b, QString c, QString d, QString answer, QString detail);
 

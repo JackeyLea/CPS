@@ -59,10 +59,17 @@ void ChapterExercise::initUI()
     }else{
         m_iQuestionID = 0;
     }
-    //获取数据库中有效id
-    m_iQuestionID = DBHandler::instance()->getQIDSubjectChapter(m_iSubject,m_iChapter);
-    if(m_iQuestionID==-1){
+    //获取数据库中最小有效id
+    m_iMinQuestionID = DBHandler::instance()->getMinQIDSubjectChapter(m_iSubject,m_iChapter);
+    if(m_iMinQuestionID==-1){
         qDebug()<<"[ERROR] [ChapterExercise::initUI] Cannot get start question id.";
+    }
+    m_iQuestionID = m_iMinQuestionID;
+
+    //获取当前章节最大ID
+    m_iMaxQuestionID = DBHandler::instance()->getMaxQIDSubjectChapter(m_iSubject,m_iChapter);
+    if(m_iMaxQuestionID==-1){
+        qDebug()<<"[ERROR] [ChapterExercise::initUI] Cannot get end question id.";
     }
 
     //位于左侧的题目状态显示界面
@@ -87,6 +94,32 @@ void ChapterExercise::initUI()
     setGeometry(QApplication::desktop()->width() / 2 - width()/2,
                 QApplication::desktop()->height()/2-height()/2,
                 width(),height());
+    checkPreviouseNext();//检测上一题下一题
+}
+
+void ChapterExercise::checkPreviouseNext()
+{
+    //上一题下一题按钮
+    if(m_iQuestionID == m_iMinQuestionID){
+        ui->btnPrevious->setEnabled(false);
+    }else{
+        ui->btnPrevious->setEnabled(true);
+    }
+    if(m_iQuestionID == m_iMaxQuestionID){
+        ui->btnNext->setEnabled(false);
+    }else{
+        ui->btnNext->setEnabled(true);
+    }
+    // TODO这里一个问题，只有一道题的时候
+}
+
+void ChapterExercise::clearOptionStatus()
+{
+    ui->radioBtnA->setChecked(false);
+    ui->radioBtnB->setChecked(false);
+    ui->radioBtnC->setChecked(false);
+    ui->radioBtnD->setChecked(false);
+    // TODO 下一题后无法清除之前的选中状态
 }
 
 void ChapterExercise::showQuestionWithSCID(int subject, int chapter, int id)
@@ -99,3 +132,20 @@ void ChapterExercise::showQuestionWithSCID(int subject, int chapter, int id)
     ui->labelC->setText(q.c);
     ui->labelD->setText(q.d);
 }
+
+void ChapterExercise::on_btnPrevious_clicked()
+{
+    clearOptionStatus();//清除选项状态
+    m_iQuestionID -=1;
+    showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
+    checkPreviouseNext();
+}
+
+void ChapterExercise::on_btnNext_clicked()
+{
+    clearOptionStatus();//清除选项状态
+    m_iQuestionID +=1;
+    showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
+    checkPreviouseNext();
+}
+

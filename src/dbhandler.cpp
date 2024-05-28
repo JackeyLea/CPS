@@ -165,7 +165,7 @@ int DBHandler::getQCntSubjectChapter(int subjectID, int chapterID)
     return cnt;
 }
 
-int DBHandler::getQIDSubjectChapter(int subjectID, int chapterID)
+int DBHandler::getMinQIDSubjectChapter(int subjectID, int chapterID)
 {
     int id = -1;
     if(m_db.isOpen()){
@@ -173,6 +173,21 @@ int DBHandler::getQIDSubjectChapter(int subjectID, int chapterID)
         if(m_query.exec(sql)){
             while(m_query.next()){
                 id = m_query.value("min(id)").toInt();
+            }
+        }
+    }
+
+    return id;
+}
+
+int DBHandler::getMaxQIDSubjectChapter(int subjectID, int chapterID)
+{
+    int id = -1;
+    if(m_db.isOpen()){
+        QString sql = QString("select max(id) from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                id = m_query.value("max(id)").toInt();
             }
         }
     }
