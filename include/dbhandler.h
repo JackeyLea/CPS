@@ -12,6 +12,8 @@
 #include <QSqlError>
 #include <QSqlResult>
 
+#include "icd.h"
+
 class DBHandler
 {
 public:
@@ -30,7 +32,12 @@ public:
     QStringList getSubjectList();
     QStringList getChapterList(int subjectID);
 
+    int getQCntSubjectChapter(int subjectID,int chapterID);
+    int getQIDSubjectChapter(int subjectID,int chapterID);
+
     bool insertQuestion(int subjectID, int chapterID, QString desc, QString a, QString b, QString c, QString d, QString answer, QString detail);
+
+    Question getQuestionInfo(int subjectID,int chapterID,int id);
 
 protected:
     void connect2db();

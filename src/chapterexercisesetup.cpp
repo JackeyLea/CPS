@@ -5,6 +5,7 @@
 #include "chapterexercise.h"
 
 #include <QDebug>
+#include <QMessageBox>
 
 ChapterExerciseSetup::ChapterExerciseSetup(QWidget *parent)
     : QWidget(parent)
@@ -49,13 +50,21 @@ void ChapterExerciseSetup::on_btnConfirm_clicked()
 
     bool isContinue = ui->radioBtnContinue->isChecked();
 
+    //先判断当前选择的章节是否有题目
+    int qcnt = DBHandler::instance()->getQCntSubjectChapter(subjectID,chapterID);
+    if(qcnt<=0){
+        QMessageBox::information(this,QString("警告"),QString("当前项目的当前章节没有题目可以刷"));
+        return;
+    }
+
     //显示题目界面
     if(!ce){
-        ce = new ChapterExercise(subjectID,chapterID,isContinue);
+        ce = new ChapterExercise(subjectID,chapterID,isContinue,qcnt);
     }
     ce->setSubject(subjectID);
     ce->setChapter(chapterID);
-    ce->show();
+    ce->setQCnt(qcnt);
+    ce->initUI();
 }
 
 void ChapterExerciseSetup::on_btnCancer_clicked()

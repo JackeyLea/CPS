@@ -15,11 +15,11 @@ int main(int argc, char *argv[])
     // MainWindow w;
     // w.show();
 
-    // ChapterExerciseSetup setup;
-    // setup.show();
+    ChapterExerciseSetup setup;
+    setup.show();
 
-    AddQuestion aq;
-    aq.show();
+    //AddQuestion aq;
+    //aq.show();
 
     return a.exec();
 }

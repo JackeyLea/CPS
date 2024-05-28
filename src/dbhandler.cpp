@@ -1,4 +1,5 @@
 #include "dbhandler.h"
+#include "icd.h"
 
 #include <QMessageBox>
 #include <QDebug>
@@ -148,6 +149,36 @@ QStringList DBHandler::getChapterList(int subjectID)
 
     return r;
 }
+//获取当前科目当前章节题目数量
+int DBHandler::getQCntSubjectChapter(int subjectID, int chapterID)
+{
+    int cnt = -1;
+    if(m_db.isOpen()){
+        QString sql = QString("select count(id) from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                cnt = m_query.value("count(id)").toInt();
+            }
+        }
+    }
+
+    return cnt;
+}
+
+int DBHandler::getQIDSubjectChapter(int subjectID, int chapterID)
+{
+    int id = -1;
+    if(m_db.isOpen()){
+        QString sql = QString("select min(id) from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                id = m_query.value("min(id)").toInt();
+            }
+        }
+    }
+
+    return id;
+}
 
 bool DBHandler::insertQuestion(int subjectID,int chapterID,
                                QString desc,QString a,QString b,QString c,QString d,
@@ -185,6 +216,27 @@ bool DBHandler::insertQuestion(int subjectID,int chapterID,
     }
 
     return r;
+}
+
+Question DBHandler::getQuestionInfo(int subjectID, int chapterID, int id)
+{
+    Question q;
+    if(m_db.isOpen()){
+        QString sql = QString("select desc,a,b,c,d,answer,explain from questions where id=%1 and subject=%2 and chapter=%3").arg(id).arg(subjectID).arg(chapterID);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                q.desc    = m_query.value("desc").toString();
+                q.a       = m_query.value("a").toString();
+                q.b       = m_query.value("b").toString();
+                q.c       = m_query.value("c").toString();
+                q.d       = m_query.value("d").toString();
+                q.answer  = m_query.value("answer").toString();
+                q.explain = m_query.value("explain").toString();
+            }
+        }
+    }
+
+    return q;
 }
 
 void DBHandler::connect2db()
