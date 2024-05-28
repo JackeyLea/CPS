@@ -29,20 +29,13 @@
    <property name="spacing">
     <number>1</number>
    </property>
-   <item row="0" column="0">
+   <item row="0" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout">
      <property name="spacing">
       <number>1</number>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelChapter">
-       <property name="text">
-        <string>科目：</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="comboBoxSubject"/>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="comboBoxChapter"/>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="labelSection">
@@ -51,12 +44,36 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="comboBoxChapter"/>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBoxSubject"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelChapter">
+       <property name="text">
+        <string>科目：</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QRadioButton" name="radioBtnContinue">
+       <property name="text">
+        <string>继续练习</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QRadioButton" name="radioBtnNew">
+       <property name="text">
+        <string>全新练习</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
       <number>1</number>

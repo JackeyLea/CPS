@@ -12,9 +12,10 @@ class ChapterExercise : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChapterExercise(int subject,int chapter,QWidget *parent = nullptr);
+    explicit ChapterExercise(int subject,int chapter,bool status,QWidget *parent = nullptr);
     ~ChapterExercise();
 
+    void setIsContinue(bool status);
     void setSubject(int newSubject);
     void setChapter(int newChapter);
 
@@ -25,6 +26,7 @@ private:
 
     int m_iSubject;
     int m_iChapter;
+    bool m_bIsContinue;
 };
 
 #endif // CHAPTEREXERCISE_H

@@ -140,22 +140,18 @@ QStringList DBHandler::getChapterList(QString subject)
     if(m_db.isOpen()){
         //获取科目Id
         int id = getSubjectID(subject);
-        qDebug()<<id;
 
         if(id==-1){
             return r;
         }
 
         QString sql = QString("select name from chapter where subject=%1").arg(id);
-        qDebug()<<sql;
         if(m_query.exec(sql)){
             while(m_query.next()){
                 r.append(m_query.value("name").toString());
             }
         }
     }
-
-    qDebug()<<r;
 
     return r;
 }

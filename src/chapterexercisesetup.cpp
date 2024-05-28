@@ -40,14 +40,17 @@ void ChapterExerciseSetup::on_btnConfirm_clicked()
 {
     QString subject = ui->comboBoxSubject->currentText();
     QString chapter = ui->comboBoxChapter->currentText();
-    qDebug()<<subject<<chapter;
+
     if(subject.isEmpty() || chapter.isEmpty()) return;
 
     int subjectID = DBHandler::instance()->getSubjectID(subject);
     int chapterID = DBHandler::instance()->getChapterID(subjectID,chapter);
-    qDebug()<<subjectID<<chapterID;
+
+    bool isContinue = ui->radioBtnContinue->isChecked();
+
+    //显示题目界面
     if(!ce){
-        ce = new ChapterExercise(subjectID,chapterID);
+        ce = new ChapterExercise(subjectID,chapterID,isContinue);
     }
     ce->setSubject(subjectID);
     ce->setChapter(chapterID);
