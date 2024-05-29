@@ -19,7 +19,7 @@ ChapterExercise::ChapterExercise(int subject, int chapter, bool status, int qnt,
     ,m_bIsContinue(status)
 {
     ui->setupUi(this);
-    qDebug()<<QString("ChapterExercies->subject id %1,chapter id %2,status %3")
+    qDebug()<<QString("[Info] [ChapterExercies::ChapterExercise] subject id %1,chapter id %2,status %3")
                     .arg(subject).arg(chapter).arg(status);
 }
 
@@ -112,11 +112,11 @@ void ChapterExercise::checkPreviouseNext()
 
 void ChapterExercise::clearOptionStatus()
 {
+    //下一题后清空选项状态
     ui->radioBtnA->setChecked(false);
     ui->radioBtnB->setChecked(false);
     ui->radioBtnC->setChecked(false);
     ui->radioBtnD->setChecked(false);
-    // TODO 下一题后无法清除之前的选中状态
 }
 
 void ChapterExercise::showQuestionWithSCID(int subject, int chapter, int id)
@@ -167,21 +167,37 @@ void ChapterExercise::on_btnNext_clicked()
 
 void ChapterExercise::on_radioBtnA_clicked()
 {
+    ui->radioBtnA->setChecked(true);
+    ui->radioBtnB->setChecked(false);
+    ui->radioBtnC->setChecked(false);
+    ui->radioBtnD->setChecked(false);
     optionChoosed(QString("A"));
 }
 
 void ChapterExercise::on_radioBtnB_clicked()
 {
+    ui->radioBtnA->setChecked(false);
+    ui->radioBtnB->setChecked(true);
+    ui->radioBtnC->setChecked(false);
+    ui->radioBtnD->setChecked(false);
     optionChoosed(QString("B"));
 }
 
 void ChapterExercise::on_radioBtnC_clicked()
 {
+    ui->radioBtnA->setChecked(false);
+    ui->radioBtnB->setChecked(false);
+    ui->radioBtnC->setChecked(true);
+    ui->radioBtnD->setChecked(false);
     optionChoosed(QString("C"));
 }
 
 void ChapterExercise::on_radioBtnD_clicked()
 {
+    ui->radioBtnA->setChecked(false);
+    ui->radioBtnB->setChecked(false);
+    ui->radioBtnC->setChecked(false);
+    ui->radioBtnD->setChecked(true);
     optionChoosed(QString("D"));
 }
 
