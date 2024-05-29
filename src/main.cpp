@@ -1,7 +1,6 @@
 #include <QApplication>
 
 #include "widgetlogin.h"
-#include "mainwindow.h"
 #include "chapterexercisesetup.h"
 #include "addquestion.h"
 

@@ -23,7 +23,6 @@ SOURCES += \
     src/chapterexercisesetup.cpp \
     src/dbhandler.cpp \
     src/main.cpp \
-    src/mainwindow.cpp \
     src/widgetlogin.cpp \
     src/sha512.cpp
 
@@ -33,7 +32,6 @@ HEADERS += \
     include/chapterexercise.h \
     include/chapterexercisesetup.h \
     include/dbhandler.h \
-    include/mainwindow.h \
     include/widgetlogin.h \
     include/sha512.h
 
@@ -41,7 +39,6 @@ FORMS += \
     ui/addquestion.ui \
     ui/chapterexercise.ui \
     ui/chapterexercisesetup.ui \
-    ui/mainwindow.ui \
     ui/widgetlogin.ui
 
 # Default rules for deployment.
