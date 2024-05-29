@@ -8,14 +8,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    // WidgetLogin loginWidget;
-    // loginWidget.show();
-
-    // MainWindow w;
-    // w.show();
-
-    ChapterExerciseSetup setup;
-    setup.show();
+    WidgetLogin loginWidget;
+    loginWidget.show();
 
     // AddQuestion aq;
     // aq.show();

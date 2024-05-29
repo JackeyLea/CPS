@@ -14,7 +14,7 @@ class ChapterExerciseSetup : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChapterExerciseSetup(QWidget *parent = nullptr);
+    explicit ChapterExerciseSetup(int userId,QWidget *parent = nullptr);
     ~ChapterExerciseSetup();
 
 protected:
@@ -31,6 +31,8 @@ private:
     Ui::ChapterExerciseSetup *ui;
 
     ChapterExercise *ce;
+
+    int m_iUser;
 };
 
 #endif // CHAPTEREXERCISESETUP_H

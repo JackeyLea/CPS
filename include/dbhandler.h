@@ -22,12 +22,13 @@ public:
 
     static DBHandler* instance();
 
-    bool login(QString name, QString pwd);
+    int login(QString name, QString pwd);
 
     bool regis(QString name,QString pwd);
 
     int getSubjectID(QString subject);
     int getChapterID(int subjectID,QString chapter);
+    int getRecordID(int user,int subject,int chapter);
 
     QStringList getSubjectList();
     QStringList getChapterList(int subjectID);
@@ -39,6 +40,8 @@ public:
     bool insertQuestion(int subjectID, int chapterID, QString desc, QString a, QString b, QString c, QString d, QString answer, QString detail);
 
     Question getQuestionInfo(int subjectID,int chapterID,int id);
+
+    bool saveQuestionRecord(int user,int subject,int chapter,int question,int answer);
 
 protected:
     void connect2db();

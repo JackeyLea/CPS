@@ -3,6 +3,7 @@
 
 #include "sha512.h"
 #include "dbhandler.h"
+#include "chapterexercisesetup.h"
 
 #include <QMessageBox>
 
@@ -11,8 +12,6 @@ WidgetLogin::WidgetLogin(QWidget *parent)
     , ui(new Ui::WidgetLogin)
 {
     ui->setupUi(this);
-
-    DBHandler::instance();
 }
 
 WidgetLogin::~WidgetLogin()
@@ -34,9 +33,11 @@ void WidgetLogin::on_btnLogin_clicked()
 
     QString name = ui->lineName->text();
 
-    bool status = DBHandler::instance()->login(name,QString::fromStdString(enPWD));
-    if(status){
+    int userID = DBHandler::instance()->login(name,QString::fromStdString(enPWD));
+    if(userID!=-1){
         QMessageBox::information(this,QString("提示"),QString("登录成功"));
+        ceSetup = new ChapterExerciseSetup(userID);
+        ceSetup->show();
     }else{
         QMessageBox::information(this,QString("提示"),QString("用户不存在"));
     }

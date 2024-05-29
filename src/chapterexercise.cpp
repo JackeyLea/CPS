@@ -7,10 +7,12 @@
 #include <QButtonGroup>
 #include <QResizeEvent>
 #include <QDesktopWidget>
+#include <QMessageBox>
 
-ChapterExercise::ChapterExercise(int subject, int chapter, bool status, int qnt, QWidget *parent)
+ChapterExercise::ChapterExercise(int userID, int subject, int chapter, bool status, int qnt, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ChapterExercise)
+    ,m_iUser(userID)
     ,m_iSubject(subject)
     ,m_iChapter(chapter)
     ,m_iQuestionID(0)
@@ -83,6 +85,9 @@ void ChapterExercise::initUI()
     if(m_iMaxQuestionID==-1){
         qDebug()<<"[ERROR] [ChapterExercise::initUI] Cannot get end question id.";
     }
+
+    //检测继续刷题状态 TODO 无法继续刷题
+    // TODO使用那个记录
 
     //位于左侧的题目状态显示界面
     m_bgBtns = new QButtonGroup(ui->frameNav);
@@ -282,5 +287,22 @@ void ChapterExercise::on_radioBtnD_clicked()
     ui->radioBtnC->setChecked(false);
     ui->radioBtnD->setChecked(true);
     optionChoosed(4);
+}
+
+//结束刷题
+void ChapterExercise::on_btnEnd_clicked()
+{
+    QMessageBox::StandardButton btn = QMessageBox::information(this,QString("警告"),QString("是否保存刷题记录"),QMessageBox::Yes | QMessageBox::No);
+    if(btn==QMessageBox::Yes){
+        //保存记录
+        for(int i=0;i<m_mQDoneMap.count();i++){
+            bool status = DBHandler::instance()->saveQuestionRecord(m_iUser,m_iSubject,m_iChapter,m_iMinQuestionID+i,m_mQDoneMap.value(m_iMinQuestionID+i));
+            if(!status){
+                qDebug()<<"save record failed: "<<m_iMinQuestionID+i;
+            }
+        }
+    }
+
+    close();
 }
 

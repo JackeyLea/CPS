@@ -15,7 +15,7 @@ class ChapterExercise : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChapterExercise(int subject,int chapter,bool status,int qnt,QWidget *parent = nullptr);
+    explicit ChapterExercise(int userID,int subject,int chapter,bool status,int qnt,QWidget *parent = nullptr);
     ~ChapterExercise();
 
     void setIsContinue(bool status);
@@ -49,9 +49,12 @@ private slots:
 
     void on_radioBtnD_clicked();
 
+    void on_btnEnd_clicked();
+
 private:
     Ui::ChapterExercise *ui;
 
+    int m_iUser;//用户id
     int m_iSubject;
     int m_iChapter;
     int m_iMinQuestionID;//当前章节最小ID

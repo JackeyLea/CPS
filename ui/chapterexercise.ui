@@ -6,14 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>648</width>
-    <height>256</height>
+    <width>650</width>
+    <height>153</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="layoutGWidget">
+   <property name="leftMargin">
+    <number>1</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
+    <number>1</number>
+   </property>
+   <property name="spacing">
+    <number>1</number>
+   </property>
    <item row="0" column="0">
     <widget class="QWidget" name="widgetStatus" native="true">
      <property name="minimumSize">
@@ -224,9 +239,27 @@ background-color: green;</string>
    </item>
    <item row="0" column="1">
     <widget class="QWidget" name="widgetAnswer" native="true">
-     <layout class="QGridLayout" name="gridLayout_3">
+     <layout class="QGridLayout" name="layoutGAnswer">
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <property name="bottomMargin">
+       <number>1</number>
+      </property>
+      <property name="spacing">
+       <number>1</number>
+      </property>
       <item row="0" column="0">
        <layout class="QGridLayout" name="layoutGQA">
+        <property name="spacing">
+         <number>1</number>
+        </property>
         <item row="1" column="0">
          <widget class="QRadioButton" name="radioBtnA">
           <property name="minimumSize">
@@ -382,6 +415,9 @@ background-color: green;</string>
       </item>
       <item row="2" column="0">
        <layout class="QHBoxLayout" name="layoutHNext">
+        <property name="spacing">
+         <number>1</number>
+        </property>
         <item>
          <widget class="QPushButton" name="btnPrevious">
           <property name="text">
@@ -393,6 +429,13 @@ background-color: green;</string>
          <widget class="QPushButton" name="btnNext">
           <property name="text">
            <string>下一题</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnEnd">
+          <property name="text">
+           <string>结束刷题</string>
           </property>
          </widget>
         </item>

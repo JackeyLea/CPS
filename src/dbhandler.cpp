@@ -12,7 +12,10 @@ DBHandler::DBHandler() {
 
 DBHandler::~DBHandler()
 {
-
+    m_query.clear();
+    if(m_db.isOpen()){
+        m_db.close();
+    }
 }
 
 DBHandler *DBHandler::instance()
@@ -24,20 +27,20 @@ DBHandler *DBHandler::instance()
     return s_instance;
 }
 
-bool DBHandler::login(QString name, QString pwd)
+int DBHandler::login(QString name, QString pwd)
 {
-    bool r = false;
+    int userID = -1;
 
     //检测表
-    if(!isTableExists("users")) return r;
-    if(name.isEmpty() || pwd.isEmpty()) return r;
+    if(!isTableExists("users")) return userID;
+    if(name.isEmpty() || pwd.isEmpty()) return userID;
 
     if(m_db.isOpen()){
         QString sql = QString("select id from users where name='%1' and pwd='%2';")
                           .arg(name,pwd);
         if(m_query.exec(sql)){
             while(m_query.next()){
-                r=true;
+                userID=m_query.value("id").toInt();
             }
         }else{
             qDebug()<<"[ERROR] [login] Cannot exec sql."<<m_query.lastError();
@@ -46,7 +49,7 @@ bool DBHandler::login(QString name, QString pwd)
         qDebug()<<"[ERROR] [login] Please connect to db first."<<m_db.lastError();
     }
 
-    return r;
+    return userID;
 }
 
 bool DBHandler::regis(QString name, QString pwd)
@@ -68,7 +71,7 @@ bool DBHandler::regis(QString name, QString pwd)
         }
     }
     //插入数据
-    if(!login(name,pwd)){
+    if(login(name,pwd)==-1){
         QString sql = QString("insert into users (id,name,pwd) VALUES (%1,'%2','%3');")
                           .arg(id+1).arg(name,pwd);
         if(m_query.exec(sql)){
@@ -120,6 +123,21 @@ int DBHandler::getChapterID(int subjectID, QString chapter)
         if(m_query.exec(sql)){
             while(m_query.next()){
                 id = m_query.value("id").toInt();
+            }
+        }
+    }
+
+    return id;
+}
+//获取某用户、某科目、某章节最大ID
+int DBHandler::getRecordID(int user, int subject, int chapter)
+{
+    int id=-1;
+    if(m_db.isOpen()){
+        QString sql = QString("select max(id) from records where user=%1 and subject=%2 and chapter=%3").arg(user).arg(subject).arg(chapter);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                id = m_query.value("max(id)").toInt();
             }
         }
     }
@@ -289,6 +307,49 @@ Question DBHandler::getQuestionInfo(int subjectID, int chapterID, int id)
     }
 
     return q;
+}
+
+bool DBHandler::saveQuestionRecord(int user, int subject, int chapter, int question, int answer)
+{
+    bool r=false;
+
+    if(user==-1 || subject==-1 || chapter==-1 || question==-1 ) return r;
+
+    if(m_db.isOpen()){
+        //先检测是否存在，如果存在就更新答案
+        int id=-1;
+        QString sql = QString("select id from records where user=%1 and subject=%2 and chapter=%3 and question=%4;").arg(user).arg(subject).arg(chapter).arg(question);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                id = m_query.value("id").toInt();
+            }
+        }
+        //更新数据
+        if(id!=-1){
+            sql = QString("update records set answer=%1 where id=%2 and subject=%3 and chapter=%4 and question=%5;").arg(answer).arg(id).arg(subject).arg(chapter).arg(question);
+            if(m_query.exec(sql)){
+                r=true;
+            }else{
+                qDebug()<<"[ERROR] Cannot update record."<<m_query.lastError();
+            }
+        }else{
+            //如果数据库中没有老数据，就先获取最大id
+            int maxid = getRecordID(user,subject,chapter);
+            if(maxid != -1){
+                sql = QString("insert into records (id,user,subject,chapter,question,answer) VALUES (%1,%2,%3,%4,%5,%6);").arg(maxid+1).arg(user).arg(subject).arg(chapter).arg(question).arg(answer);
+                if(!m_query.exec(sql)){
+                    r=false;
+                    qDebug()<<"[ERROR] Cannot add new data into db."<<m_query.lastError();
+                }else{
+                    r=true;
+                }
+            }else{
+                qDebug()<<"[ERROR] Cannot get max id with user/subject/chapter."<<m_query.lastError();
+            }
+        }
+    }
+
+    return r;
 }
 
 void DBHandler::connect2db()

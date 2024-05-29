@@ -7,10 +7,11 @@
 #include <QDebug>
 #include <QMessageBox>
 
-ChapterExerciseSetup::ChapterExerciseSetup(QWidget *parent)
+ChapterExerciseSetup::ChapterExerciseSetup(int userId, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ChapterExerciseSetup)
     ,ce(NULL)
+    ,m_iUser(userId)
 {
     ui->setupUi(this);
 
@@ -19,6 +20,10 @@ ChapterExerciseSetup::ChapterExerciseSetup(QWidget *parent)
 
 ChapterExerciseSetup::~ChapterExerciseSetup()
 {
+    if(ce){
+        ce->deleteLater();
+        ce = NULL;
+    }
     delete ui;
 }
 //从数据库获取数据并填充界面
@@ -62,7 +67,7 @@ void ChapterExerciseSetup::on_btnConfirm_clicked()
 
     //显示题目界面
     if(!ce){
-        ce = new ChapterExercise(subjectID,chapterID,isContinue,qcnt);
+        ce = new ChapterExercise(m_iUser,subjectID,chapterID,isContinue,qcnt);
     }
     ce->setSubject(subjectID);
     ce->setChapter(chapterID);
