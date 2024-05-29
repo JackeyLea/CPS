@@ -30,7 +30,12 @@ public:
     void showQuestionWithSCID(int subject,int chapter,int id);
     void updateProcessBar();
 
-    void optionChoosed(QString option);
+    void optionChoosed(int option);
+    void setExistedOption();
+    void setCurQStatus();
+
+protected slots:
+    void sltBtnStatusClicked();
 private slots:
     void on_btnPrevious_clicked();
 
@@ -56,7 +61,7 @@ private:
     int m_iChapterQCnt;//当前章节总题数
     bool m_bIsContinue;
     QButtonGroup *m_bgBtns;//用于显示状态的按钮
-    QMap<int,QString> m_mQDoneMap;//统计已答题数据
+    QMap<int,int> m_mQDoneMap;//统计已答题数据
 };
 
 #endif // CHAPTEREXERCISE_H

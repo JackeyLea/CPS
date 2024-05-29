@@ -25,6 +25,18 @@ ChapterExercise::ChapterExercise(int subject, int chapter, bool status, int qnt,
 
 ChapterExercise::~ChapterExercise()
 {
+    if(m_bgBtns){
+        for(int i=0;i<m_iChapterQCnt;i++){
+            QPushButton *btn = (QPushButton*)m_bgBtns->button(i);
+            if(btn){
+                btn->disconnect(SIGNAL(clicked()),this,SLOT(sltBtnStatusClicked()));
+                btn->deleteLater();
+                btn=NULL;
+            }
+        }
+        m_bgBtns->deleteLater();
+        m_bgBtns = NULL;
+    }
     delete ui;
 }
 
@@ -80,6 +92,7 @@ void ChapterExercise::initUI()
         btn->setGeometry(10+(i%5)*35,10+(i/5)*35,25,25);
         btn->setStyleSheet(QString("border:1px solid gray;background-color:gray;"));
         m_bgBtns->addButton(btn,i);
+        connect(btn,&QPushButton::clicked,this,&ChapterExercise::sltBtnStatusClicked);
     }
 
     updateProcessBar();//进度条
@@ -128,6 +141,10 @@ void ChapterExercise::showQuestionWithSCID(int subject, int chapter, int id)
     ui->labelB->setText(q.b);
     ui->labelC->setText(q.c);
     ui->labelD->setText(q.d);
+
+    //显示当前题目的状态，是否是已完成
+    setExistedOption();
+    setCurQStatus();
 }
 //更新进度条
 void ChapterExercise::updateProcessBar()
@@ -138,15 +155,80 @@ void ChapterExercise::updateProcessBar()
     }
 }
 
-void ChapterExercise::optionChoosed(QString option)
+void ChapterExercise::optionChoosed(int option)
 {
     //如果某一题的答案中的任意一个选项被点击了
     if(!m_mQDoneMap.contains(m_iQuestionID)){
         m_mQDoneMap.insert(m_iQuestionID,option);
         m_iDoneCnt++;
-        m_bgBtns->button(m_iQuestionID-m_iMinQuestionID)->setStyleSheet("border:1px solid green;\nbackground-color: green;");
+        setCurQStatus();
     }
     updateProcessBar();
+}
+//如果当前题目已经做了，显示做的结果
+void ChapterExercise::setExistedOption()
+{
+    if(m_mQDoneMap.contains(m_iQuestionID)){
+        int option = m_mQDoneMap.value(m_iQuestionID);
+        setCurQStatus();
+        //设置四个按钮状态
+        switch(option){
+        case 1://选择A
+            ui->radioBtnA->setChecked(true);
+            ui->radioBtnB->setChecked(false);
+            ui->radioBtnC->setChecked(false);
+            ui->radioBtnD->setChecked(false);
+            break;
+        case 2:
+            ui->radioBtnA->setChecked(false);
+            ui->radioBtnB->setChecked(true);
+            ui->radioBtnC->setChecked(false);
+            ui->radioBtnD->setChecked(false);
+            break;
+        case 3:
+            ui->radioBtnA->setChecked(false);
+            ui->radioBtnB->setChecked(false);
+            ui->radioBtnC->setChecked(true);
+            ui->radioBtnD->setChecked(false);
+            break;
+        case 4:
+            ui->radioBtnA->setChecked(false);
+            ui->radioBtnB->setChecked(false);
+            ui->radioBtnC->setChecked(false);
+            ui->radioBtnD->setChecked(true);
+            break;
+        }
+    }
+}
+//设置当前题的状态：已完成 当前题 未完成
+void ChapterExercise::setCurQStatus()
+{
+    for(int i=0;i<m_iChapterQCnt;i++){
+        bool isDone=m_mQDoneMap.contains(m_iMinQuestionID+i);//完成
+        bool isCur=(m_iQuestionID==i+m_iMinQuestionID);//当前
+        if(isDone){
+            if(isCur){//当前已完成
+                m_bgBtns->button(i)->setStyleSheet(QString("border:1px solid red;\nbackground-color: green;"));
+            }else{//非当前已完成
+                m_bgBtns->button(i)->setStyleSheet(QString("border:1px solid gray;\nbackground-color: green;"));
+            }
+        }else{
+            if(isCur){//当前未完成
+                m_bgBtns->button(i)->setStyleSheet(QString("border:1px solid red;\nbackground-color: gray;"));
+            }else{//非当前未完成
+                m_bgBtns->button(i)->setStyleSheet(QString("border:1px solid gray;background-color:gray;"));
+            }
+        }
+    }
+    //设置
+}
+//左侧状态按钮点击后
+void ChapterExercise::sltBtnStatusClicked()
+{
+    QPushButton *btn = (QPushButton*)sender();
+    m_iQuestionID = m_bgBtns->id(btn)+1;
+    showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
+    checkPreviouseNext();//点击新按钮后检查下一题按钮状态
 }
 
 void ChapterExercise::on_btnPrevious_clicked()
@@ -163,6 +245,7 @@ void ChapterExercise::on_btnNext_clicked()
     m_iQuestionID +=1;
     showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
     checkPreviouseNext();
+    setCurQStatus();
 }
 
 void ChapterExercise::on_radioBtnA_clicked()
@@ -171,7 +254,7 @@ void ChapterExercise::on_radioBtnA_clicked()
     ui->radioBtnB->setChecked(false);
     ui->radioBtnC->setChecked(false);
     ui->radioBtnD->setChecked(false);
-    optionChoosed(QString("A"));
+    optionChoosed(1);
 }
 
 void ChapterExercise::on_radioBtnB_clicked()
@@ -180,7 +263,7 @@ void ChapterExercise::on_radioBtnB_clicked()
     ui->radioBtnB->setChecked(true);
     ui->radioBtnC->setChecked(false);
     ui->radioBtnD->setChecked(false);
-    optionChoosed(QString("B"));
+    optionChoosed(2);
 }
 
 void ChapterExercise::on_radioBtnC_clicked()
@@ -189,7 +272,7 @@ void ChapterExercise::on_radioBtnC_clicked()
     ui->radioBtnB->setChecked(false);
     ui->radioBtnC->setChecked(true);
     ui->radioBtnD->setChecked(false);
-    optionChoosed(QString("C"));
+    optionChoosed(3);
 }
 
 void ChapterExercise::on_radioBtnD_clicked()
@@ -198,6 +281,6 @@ void ChapterExercise::on_radioBtnD_clicked()
     ui->radioBtnB->setChecked(false);
     ui->radioBtnC->setChecked(false);
     ui->radioBtnD->setChecked(true);
-    optionChoosed(QString("D"));
+    optionChoosed(4);
 }
 
