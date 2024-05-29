@@ -42,6 +42,7 @@ public:
 
 protected:
     void connect2db();
+    bool isTableExists(QString tableName);
 
 private:
     static DBHandler* s_instance;

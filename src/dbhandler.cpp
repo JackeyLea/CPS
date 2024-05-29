@@ -28,6 +28,8 @@ bool DBHandler::login(QString name, QString pwd)
 {
     bool r = false;
 
+    //检测表
+    if(!isTableExists("users")) return r;
     if(name.isEmpty() || pwd.isEmpty()) return r;
 
     if(m_db.isOpen()){
@@ -50,6 +52,9 @@ bool DBHandler::login(QString name, QString pwd)
 bool DBHandler::regis(QString name, QString pwd)
 {
     bool r=false;
+
+    //检测表
+    if(!isTableExists("users")) return r;
 
     if(name.isEmpty() || pwd.isEmpty()) return r;
 
@@ -83,6 +88,9 @@ int DBHandler::getSubjectID(QString subject)
 {
     int id=-1;
 
+    //检测表
+    if(!isTableExists("subject")) return id;
+
     if(subject.isEmpty()) return id;
 
     if(m_db.isOpen()){
@@ -100,6 +108,9 @@ int DBHandler::getSubjectID(QString subject)
 int DBHandler::getChapterID(int subjectID, QString chapter)
 {
     int id=-1;
+
+    //检测表
+    if(!isTableExists("chapter")) return id;
 
     if(chapter.isEmpty() || (subjectID==-1)) return id;
 
@@ -120,6 +131,9 @@ QStringList DBHandler::getSubjectList()
 {
     QStringList r;
 
+    //检测表
+    if(!isTableExists("subject")) return r;
+
     if(m_db.isOpen()){
         QString sql = "select name from subject;";
         if(m_query.exec(sql)){
@@ -135,6 +149,9 @@ QStringList DBHandler::getSubjectList()
 QStringList DBHandler::getChapterList(int subjectID)
 {
     QStringList r;
+
+    //检测表
+    if(!isTableExists("chapter")) return r;
 
     if(subjectID==-1) return r;
 
@@ -153,6 +170,10 @@ QStringList DBHandler::getChapterList(int subjectID)
 int DBHandler::getQCntSubjectChapter(int subjectID, int chapterID)
 {
     int cnt = -1;
+
+    //检测表
+    if(!isTableExists("questions")) return cnt;
+
     if(m_db.isOpen()){
         QString sql = QString("select count(id) from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
         if(m_query.exec(sql)){
@@ -168,6 +189,10 @@ int DBHandler::getQCntSubjectChapter(int subjectID, int chapterID)
 int DBHandler::getMinQIDSubjectChapter(int subjectID, int chapterID)
 {
     int id = -1;
+
+    //检测表
+    if(!isTableExists("questions")) return id;
+
     if(m_db.isOpen()){
         QString sql = QString("select min(id) from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
         if(m_query.exec(sql)){
@@ -183,6 +208,10 @@ int DBHandler::getMinQIDSubjectChapter(int subjectID, int chapterID)
 int DBHandler::getMaxQIDSubjectChapter(int subjectID, int chapterID)
 {
     int id = -1;
+
+    //检测表
+    if(!isTableExists("questions")) return id;
+
     if(m_db.isOpen()){
         QString sql = QString("select max(id) from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
         if(m_query.exec(sql)){
@@ -200,6 +229,10 @@ bool DBHandler::insertQuestion(int subjectID,int chapterID,
                                QString answer,QString detail)
 {
     bool r=false;
+
+    //检测表
+    if(!isTableExists("questions")) return r;
+
     if(m_db.isOpen()){
         // TODO 重复判断 描述权重占比45% abcd各占10% 答案占5% 答案解析占5%
         //获取最大id
@@ -236,6 +269,10 @@ bool DBHandler::insertQuestion(int subjectID,int chapterID,
 Question DBHandler::getQuestionInfo(int subjectID, int chapterID, int id)
 {
     Question q;
+
+    //检测表
+    if(!isTableExists("questions")) return q;
+
     if(m_db.isOpen()){
         QString sql = QString("select desc,a,b,c,d,answer,explain from questions where id=%1 and subject=%2 and chapter=%3").arg(id).arg(subjectID).arg(chapterID);
         if(m_query.exec(sql)){
@@ -267,4 +304,24 @@ void DBHandler::connect2db()
 
         m_query = QSqlQuery(m_db);
     }
+}
+//判断某个表是否存在
+bool DBHandler::isTableExists(QString tableName)
+{
+    bool r=false;
+    if(m_db.isOpen()){
+        QString sql = QString("select count(*) from sqlite_master where type='table' and name='%1';")
+                          .arg(tableName);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                r = m_query.value("count(*)").toBool() ==0 ? false : 1;
+            }
+        }
+    }
+
+    if(!r){
+        qDebug()<<"[ERROR] Specific table does not existed.";
+    }
+
+    return r;
 }

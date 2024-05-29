@@ -43,7 +43,10 @@ void ChapterExerciseSetup::on_btnConfirm_clicked()
     QString subject = ui->comboBoxSubject->currentText();
     QString chapter = ui->comboBoxChapter->currentText();
 
-    if(subject.isEmpty() || chapter.isEmpty()) return;
+    if(subject.isEmpty() || chapter.isEmpty()) {
+        QMessageBox::information(this,QString("警告"),QString("请选择需要刷题的科目和章节"));
+        return;
+    }
 
     int subjectID = DBHandler::instance()->getSubjectID(subject);
     int chapterID = DBHandler::instance()->getChapterID(subjectID,chapter);
