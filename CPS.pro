@@ -25,7 +25,8 @@ SOURCES += \
     src/main.cpp \
     src/widgetlogin.cpp \
     src/sha512.cpp \
-    src/widgetadmin.cpp
+    src/widgetadmin.cpp \
+    src/widgettype.cpp
 
 HEADERS += \
     include/icd.h \
@@ -35,14 +36,16 @@ HEADERS += \
     include/dbhandler.h \
     include/widgetlogin.h \
     include/sha512.h \
-    include/widgetadmin.h
+    include/widgetadmin.h \
+    include/widgettype.h
 
 FORMS += \
     ui/addquestion.ui \
     ui/chapterexercise.ui \
     ui/chapterexercisesetup.ui \
     ui/widgetlogin.ui \
-    ui/widgetadmin.ui
+    ui/widgetadmin.ui \
+    ui/widgettype.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
