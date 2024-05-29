@@ -10,6 +10,7 @@
 WidgetLogin::WidgetLogin(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::WidgetLogin)
+    ,ceSetup(NULL)
 {
     ui->setupUi(this);
 }
@@ -59,4 +60,3 @@ void WidgetLogin::on_btnRegister_clicked()
         QMessageBox::information(this,QString("提示"),QString("用户已存在"));
     }
 }
-

@@ -15,6 +15,11 @@ public:
     explicit WidgetAdmin(QWidget *parent = nullptr);
     ~WidgetAdmin();
 
+    void initUI();
+
+private slots:
+    void on_comboBoxSubject_currentTextChanged(const QString &text);
+
 private:
     Ui::WidgetAdmin *ui;
 };

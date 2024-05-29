@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>344</width>
+    <width>346</width>
     <height>111</height>
    </rect>
   </property>
@@ -32,40 +32,30 @@
    <property name="spacing">
     <number>1</number>
    </property>
-   <item row="0" column="1" colspan="5">
-    <widget class="QLineEdit" name="lineName"/>
-   </item>
-   <item row="3" column="5">
-    <widget class="QPushButton" name="btnRegister">
-     <property name="text">
-      <string>注册</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="5">
-    <spacer name="spacerHRegister">
+   <item row="2" column="3">
+    <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>246</width>
-       <height>25</height>
+       <width>40</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QPushButton" name="btnLogin">
-     <property name="text">
-      <string>登录</string>
-     </property>
-    </widget>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="labelName">
      <property name="text">
       <string>用户名：</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
+    <widget class="QPushButton" name="btnCancer">
+     <property name="text">
+      <string>取消</string>
      </property>
     </widget>
    </item>
@@ -89,21 +79,14 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="1" colspan="5">
-    <widget class="QLineEdit" name="linePWD">
-     <property name="echoMode">
-      <enum>QLineEdit::Password</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="4">
-    <widget class="QPushButton" name="btnCancer">
+   <item row="2" column="1" colspan="2">
+    <widget class="QPushButton" name="btnLogin">
      <property name="text">
-      <string>取消</string>
+      <string>登录</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="5">
+   <item row="2" column="5" colspan="2">
     <spacer name="spacerHCancer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -116,15 +99,32 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="3">
-    <spacer name="horizontalSpacer">
+   <item row="1" column="1" colspan="6">
+    <widget class="QLineEdit" name="linePWD">
+     <property name="echoMode">
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="6">
+    <widget class="QLineEdit" name="lineName"/>
+   </item>
+   <item row="3" column="5" colspan="2">
+    <widget class="QPushButton" name="btnRegister">
+     <property name="text">
+      <string>注册</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="5">
+    <spacer name="spacerHRegister">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>40</width>
-       <height>20</height>
+       <width>246</width>
+       <height>25</height>
       </size>
      </property>
     </spacer>
