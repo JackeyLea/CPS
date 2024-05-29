@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
+    <width>670</width>
     <height>428</height>
    </rect>
   </property>
@@ -96,6 +96,13 @@
          <widget class="QPushButton" name="btnQEdit">
           <property name="text">
            <string>章节编辑</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnAddQ">
+          <property name="text">
+           <string>添加题目</string>
           </property>
          </widget>
         </item>

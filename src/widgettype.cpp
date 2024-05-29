@@ -28,6 +28,16 @@ WidgetType::~WidgetType()
     delete ui;
 }
 
+void WidgetType::setUserID(int userid)
+{
+    m_iUserID = userid;
+}
+
+void WidgetType::setRight(int right)
+{
+    m_bIsAdmin = right;
+}
+
 void WidgetType::on_btnChapter_clicked()
 {
     if(!ceSetup){
@@ -39,8 +49,10 @@ void WidgetType::on_btnChapter_clicked()
 void WidgetType::on_btnAdmin_clicked()
 {
     if(!m_pAdmin){
-        m_pAdmin = new WidgetAdmin();
+        m_pAdmin = new WidgetAdmin(m_iUserID,m_bIsAdmin);
     }
+    m_pAdmin->setUserID(m_iUserID);
+    m_pAdmin->setRight(m_bIsAdmin);
     m_pAdmin->initUI();
 }
 

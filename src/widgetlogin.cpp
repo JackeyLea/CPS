@@ -43,6 +43,8 @@ void WidgetLogin::on_btnLogin_clicked()
         if(!m_pType){
             m_pType = new WidgetType(userID,isAdmin);
         }
+        m_pType->setUserID(userID);
+        m_pType->setRight(isAdmin);
         m_pType->show();
     }else{
         QMessageBox::information(this,QString("提示"),QString("用户不存在"));

@@ -18,6 +18,9 @@ public:
     explicit WidgetType(int userID,int right,QWidget *parent = nullptr);
     ~WidgetType();
 
+    void setUserID(int userid);
+    void setRight(int right);
+
 private slots:
     void on_btnChapter_clicked();
 
