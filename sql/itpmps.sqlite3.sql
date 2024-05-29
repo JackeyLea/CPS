@@ -1,13 +1,36 @@
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "info" (
-	"key"	TEXT,
-	"value"	TEXT
+DROP TABLE IF EXISTS "chapter";
+CREATE TABLE "chapter" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"subject"	INTEGER NOT NULL,
+	"name"	TEXT NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("subject") REFERENCES "subject"("id")
 );
-CREATE TABLE IF NOT EXISTS "skills" (
-	"chapter"	TEXT,
-	"section"	TEXT
+DROP TABLE IF EXISTS "questions";
+CREATE TABLE "questions" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"subject"	INTEGER NOT NULL,
+	"chapter"	INTEGER NOT NULL,
+	"desc"	TEXT NOT NULL,
+	"a"	TEXT,
+	"b"	TEXT,
+	"c"	TEXT,
+	"d"	TEXT,
+	"answer"	TEXT,
+	"explain"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("chapter") REFERENCES "chapter"("id"),
+	FOREIGN KEY("subject") REFERENCES "subject"("id")
 );
-CREATE TABLE IF NOT EXISTS "users" (
+DROP TABLE IF EXISTS "subject";
+CREATE TABLE "subject" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"name"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "users";
+CREATE TABLE "users" (
 	"id"	INTEGER NOT NULL UNIQUE,
 	"name"	TEXT NOT NULL UNIQUE,
 	"pwd"	TEXT NOT NULL,
