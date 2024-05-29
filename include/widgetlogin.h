@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-class ChapterExerciseSetup;
+class WidgetType;
 
 namespace Ui {
 class WidgetLogin;
@@ -27,7 +27,7 @@ private slots:
 private:
     Ui::WidgetLogin *ui;
 
-    ChapterExerciseSetup *ceSetup;
+    WidgetType *m_pType;
 };
 
 #endif // WIDGETLOGIN_H

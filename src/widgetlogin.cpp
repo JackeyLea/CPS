@@ -3,14 +3,14 @@
 
 #include "sha512.h"
 #include "dbhandler.h"
-#include "chapterexercisesetup.h"
+#include "widgettype.h"
 
 #include <QMessageBox>
 
 WidgetLogin::WidgetLogin(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::WidgetLogin)
-    ,ceSetup(NULL)
+    ,m_pType(NULL)
 {
     ui->setupUi(this);
 }
@@ -34,11 +34,16 @@ void WidgetLogin::on_btnLogin_clicked()
 
     QString name = ui->lineName->text();
 
+    bool isAdmin = false;
+    if(name=="admin") isAdmin=true;
+
     int userID = DBHandler::instance()->login(name,QString::fromStdString(enPWD));
     if(userID!=-1){
         QMessageBox::information(this,QString("提示"),QString("登录成功"));
-        ceSetup = new ChapterExerciseSetup(userID);
-        ceSetup->show();
+        if(!m_pType){
+            m_pType = new WidgetType(userID,isAdmin);
+        }
+        m_pType->show();
     }else{
         QMessageBox::information(this,QString("提示"),QString("用户不存在"));
     }
