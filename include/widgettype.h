@@ -5,6 +5,7 @@
 
 class ChapterExerciseSetup;
 class WidgetAdmin;
+class WidgetQA;
 
 namespace Ui {
 class WidgetType;
@@ -26,11 +27,14 @@ private slots:
 
     void on_btnAdmin_clicked();
 
+    void on_btnKN_clicked();
+
 private:
     Ui::WidgetType *ui;
 
     ChapterExerciseSetup *ceSetup;
     WidgetAdmin *m_pAdmin;
+    WidgetQA *m_pQA;
 
     int m_iUserID;
     bool m_bIsAdmin;//是否是管理员权限

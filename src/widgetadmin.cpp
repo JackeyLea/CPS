@@ -56,10 +56,13 @@ void WidgetAdmin::setRight(int right)
 
 void WidgetAdmin::on_comboBoxSubject_currentTextChanged(const QString &text)
 {
+    if(text.isEmpty()) return;
     int subjectID = DBHandler::instance()->getSubjectID(text);
     QStringList chapters = DBHandler::instance()->getChapterList(subjectID);
     ui->comboBoxChapter->clear();
-    ui->comboBoxChapter->addItems(chapters);
+    if(chapters.count()>0){
+        ui->comboBoxChapter->addItems(chapters);
+    }
 }
 
 void WidgetAdmin::on_btnAddQ_clicked()

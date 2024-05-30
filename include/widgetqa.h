@@ -15,6 +15,8 @@ public:
     explicit WidgetQA(QWidget *parent = nullptr);
     ~WidgetQA();
 
+    void initUI();
+
 private:
     Ui::WidgetQA *ui;
 };

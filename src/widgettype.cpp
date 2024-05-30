@@ -3,12 +3,14 @@
 #include "chapterexercisesetup.h"
 #include "widgetadmin.h"
 #include "widgettype.h"
+#include "widgetqa.h"
 
 WidgetType::WidgetType(int userID, int right, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::WidgetType)
     ,ceSetup(NULL)
     ,m_pAdmin(NULL)
+    ,m_pQA(NULL)
     ,m_iUserID(userID)
     ,m_bIsAdmin(right)
 {
@@ -43,7 +45,8 @@ void WidgetType::on_btnChapter_clicked()
     if(!ceSetup){
         ceSetup = new ChapterExerciseSetup(m_iUserID);
     }
-    ceSetup->show();
+    ceSetup->setMode(1);
+    ceSetup->initUI();
 }
 
 void WidgetType::on_btnAdmin_clicked()
@@ -56,3 +59,11 @@ void WidgetType::on_btnAdmin_clicked()
     m_pAdmin->initUI();
 }
 
+void WidgetType::on_btnKN_clicked()
+{
+    if(!ceSetup){
+        ceSetup = new ChapterExerciseSetup(m_iUserID);
+    }
+    ceSetup->setMode(0);
+    ceSetup->initUI();
+}

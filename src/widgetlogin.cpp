@@ -27,12 +27,19 @@ void WidgetLogin::on_btnCancer_clicked()
 
 void WidgetLogin::on_btnLogin_clicked()
 {
+    QString name = ui->lineName->text();
+    if(name.isEmpty()) {
+        QMessageBox::warning(this,QString("警告"),QString("请输入用户名"));
+        return;
+    }
     QString pwd = ui->linePWD->text();
+    if(pwd.isEmpty()){
+        QMessageBox::warning(this,QString("警告"),QString("请输入用户名对应的密码"));
+        return;
+    }
     //将输入的密码使用sha512进行加密
     //这里使用摘要算法而不是对称加密，是为了防止逆向出密码
     std::string enPWD = sha512(pwd.toStdString());
-
-    QString name = ui->lineName->text();
 
     bool isAdmin = false;
     if(name=="admin") isAdmin=true;

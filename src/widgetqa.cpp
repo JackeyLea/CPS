@@ -12,3 +12,8 @@ WidgetQA::~WidgetQA()
 {
     delete ui;
 }
+
+void WidgetQA::initUI()
+{
+
+}

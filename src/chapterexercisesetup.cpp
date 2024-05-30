@@ -3,6 +3,7 @@
 
 #include "dbhandler.h"
 #include "chapterexercise.h"
+#include "widgetqa.h"
 
 #include <QDebug>
 #include <QMessageBox>
@@ -11,11 +12,10 @@ ChapterExerciseSetup::ChapterExerciseSetup(int userId, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ChapterExerciseSetup)
     ,ce(NULL)
+    ,m_pQA(NULL)
     ,m_iUser(userId)
 {
     ui->setupUi(this);
-
-    initUI();
 }
 
 ChapterExerciseSetup::~ChapterExerciseSetup()
@@ -26,6 +26,11 @@ ChapterExerciseSetup::~ChapterExerciseSetup()
     }
     delete ui;
 }
+
+void ChapterExerciseSetup::setMode(int mode)
+{
+    m_iMode = mode;
+}
 //从数据库获取数据并填充界面
 void ChapterExerciseSetup::initUI()
 {
@@ -33,6 +38,17 @@ void ChapterExerciseSetup::initUI()
     ui->comboBoxSubject->clear();
     ui->comboBoxSubject->addItem(QString());
     ui->comboBoxSubject->addItems(subjects);
+
+    switch(m_iMode){
+    case 0:
+        setWindowTitle(QString("知识点学习"));
+        break;
+    case 1:
+        setWindowTitle(QString("章节练习"));
+        break;
+    }
+
+    show();
 }
 //根据选择的不同科目显示不同的章节
 void ChapterExerciseSetup::on_comboBoxSubject_currentIndexChanged(QString text)
@@ -65,14 +81,23 @@ void ChapterExerciseSetup::on_btnConfirm_clicked()
         return;
     }
 
-    //显示题目界面
-    if(!ce){
-        ce = new ChapterExercise(m_iUser,subjectID,chapterID,isContinue,qcnt);
+    //////显示界面部分////////////////
+    //不同模式显示的界面不同
+    if(m_iMode==0){//此模式对应知识点学习界面
+        if(!m_pQA){
+            m_pQA = new WidgetQA();
+        }
+        m_pQA->show();
+    }else if(m_iMode==1){//此模式对应刷题
+        //显示题目界面
+        if(!ce){
+            ce = new ChapterExercise(m_iUser,subjectID,chapterID,isContinue,qcnt);
+        }
+        ce->setSubject(subjectID);
+        ce->setChapter(chapterID);
+        ce->setQCnt(qcnt);
+        ce->initUI();
     }
-    ce->setSubject(subjectID);
-    ce->setChapter(chapterID);
-    ce->setQCnt(qcnt);
-    ce->initUI();
 }
 
 void ChapterExerciseSetup::on_btnCancer_clicked()

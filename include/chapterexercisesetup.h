@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class ChapterExercise;
+class WidgetQA;
 
 namespace Ui {
 class ChapterExerciseSetup;
@@ -17,7 +18,8 @@ public:
     explicit ChapterExerciseSetup(int userId,QWidget *parent = nullptr);
     ~ChapterExerciseSetup();
 
-protected:
+    void setMode(int mode);
+
     void initUI();
 
 private slots:
@@ -31,8 +33,10 @@ private:
     Ui::ChapterExerciseSetup *ui;
 
     ChapterExercise *ce;
+    WidgetQA *m_pQA;
 
     int m_iUser;
+    int m_iMode;//当前模式
 };
 
 #endif // CHAPTEREXERCISESETUP_H

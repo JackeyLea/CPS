@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>214</width>
-    <height>166</height>
+    <height>125</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>模式选择</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="1" column="0">
@@ -29,14 +29,7 @@
    </item>
    <item row="1" column="1">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="btnChapter">
-       <property name="text">
-        <string>章节刷题</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
+     <item row="3" column="0">
       <spacer name="spacerVBtn">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -49,12 +42,39 @@
        </property>
       </spacer>
      </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="btnKN">
+       <property name="text">
+        <string>知识点学习</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="0">
+      <widget class="QPushButton" name="btnChapter">
+       <property name="text">
+        <string>章节刷题</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
       <widget class="QPushButton" name="btnAdmin">
        <property name="text">
         <string>管理界面</string>
        </property>
       </widget>
+     </item>
+     <item row="1" column="0">
+      <spacer name="spacerVBtn2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
