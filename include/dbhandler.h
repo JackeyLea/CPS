@@ -33,6 +33,7 @@ public:
     QStringList getSubjectList();
     QStringList getChapterList(int subjectID);
 
+    int getQCntSubject(int subjectID);
     int getQCntSubjectChapter(int subjectID,int chapterID);
     int getMinQIDSubjectChapter(int subjectID,int chapterID);
     int getMaxQIDSubjectChapter(int subjectID,int chapterID);

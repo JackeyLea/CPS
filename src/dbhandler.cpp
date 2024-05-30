@@ -184,6 +184,25 @@ QStringList DBHandler::getChapterList(int subjectID)
 
     return r;
 }
+//获取指定科目所有章节的题目
+int DBHandler::getQCntSubject(int subjectID)
+{
+    int cnt = -1;
+
+    //检测表
+    if(!isTableExists("questions")) return cnt;
+
+    if(m_db.isOpen()){
+        QString sql = QString("select count(id) from questions where subject=%1;").arg(subjectID);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                cnt = m_query.value("count(id)").toInt();
+            }
+        }
+    }
+
+    return cnt;
+}
 //获取当前科目当前章节题目数量
 int DBHandler::getQCntSubjectChapter(int subjectID, int chapterID)
 {

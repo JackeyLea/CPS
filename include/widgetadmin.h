@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class AddQuestion;
+class QStandardItemModel;
 
 namespace Ui {
 class WidgetAdmin;
@@ -27,10 +28,15 @@ private slots:
 
     void on_btnAddQ_clicked();
 
+    void on_comboBoxChapter_currentTextChanged(const QString &text);
+
 private:
     Ui::WidgetAdmin *ui;
 
     AddQuestion *m_pAddQ;
+
+    QStandardItemModel *m_mUserModel;
+    QStandardItemModel *m_mItemModel;
 
     int m_iUserID;
     bool m_bIsAdmin;//是否是管理员权限
