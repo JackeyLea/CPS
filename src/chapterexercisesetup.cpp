@@ -3,7 +3,6 @@
 
 #include "dbhandler.h"
 #include "chapterexercise.h"
-#include "widgetqa.h"
 
 #include <QDebug>
 #include <QMessageBox>
@@ -83,21 +82,19 @@ void ChapterExerciseSetup::on_btnConfirm_clicked()
 
     //////显示界面部分////////////////
     //不同模式显示的界面不同
-    if(m_iMode==0){//此模式对应知识点学习界面
-        if(!m_pQA){
-            m_pQA = new WidgetQA();
-        }
-        m_pQA->show();
-    }else if(m_iMode==1){//此模式对应刷题
-        //显示题目界面
-        if(!ce){
-            ce = new ChapterExercise(m_iUser,subjectID,chapterID,isContinue,qcnt);
-        }
-        ce->setSubject(subjectID);
-        ce->setChapter(chapterID);
-        ce->setQCnt(qcnt);
-        ce->initUI();
+    //显示题目界面
+    if(!ce){
+        ce = new ChapterExercise(0,m_iUser,subjectID,chapterID,isContinue,qcnt);
     }
+    if(m_iMode==0){//此模式对应知识点学习界面
+        ce->setMode(0);
+    }else if(m_iMode==1){//此模式对应刷题
+        ce->setMode(1);
+    }
+    ce->setSubject(subjectID);
+    ce->setChapter(chapterID);
+    ce->setQCnt(qcnt);
+    ce->initUI();
 }
 
 void ChapterExerciseSetup::on_btnCancer_clicked()

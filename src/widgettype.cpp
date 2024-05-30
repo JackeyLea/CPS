@@ -3,7 +3,6 @@
 #include "chapterexercisesetup.h"
 #include "widgetadmin.h"
 #include "widgettype.h"
-#include "widgetqa.h"
 
 WidgetType::WidgetType(int userID, int right, QWidget *parent)
     : QWidget(parent)

@@ -9,7 +9,7 @@
 #include <QDesktopWidget>
 #include <QMessageBox>
 
-ChapterExercise::ChapterExercise(int userID, int subject, int chapter, bool status, int qnt, QWidget *parent)
+ChapterExercise::ChapterExercise(int mode, int userID, int subject, int chapter, bool status, int qnt, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ChapterExercise)
     ,m_iUser(userID)
@@ -18,6 +18,7 @@ ChapterExercise::ChapterExercise(int userID, int subject, int chapter, bool stat
     ,m_iQuestionID(0)
     ,m_iDoneCnt(0)
     ,m_iChapterQCnt(qnt)
+    ,m_iMode(mode)
     ,m_bIsContinue(status)
 {
     ui->setupUi(this);
@@ -66,6 +67,11 @@ void ChapterExercise::setQCnt(int newCnt)
     m_iChapterQCnt = newCnt;
 }
 
+void ChapterExercise::setMode(int newMode)
+{
+    m_iMode = newMode;
+}
+
 void ChapterExercise::initUI()
 {
     if(m_bIsContinue){
@@ -89,6 +95,22 @@ void ChapterExercise::initUI()
     //检测继续刷题状态 TODO 无法继续刷题
     // TODO使用那个记录
 
+    //////////////////////////界面显示部分////////////////////////////
+    if(m_iMode==-1){
+        QMessageBox::warning(this,QString("警告"),QString("模式错误"));
+        return;
+    }
+    if(m_iMode ==0){//知识点
+        ui->labelAnswer->setVisible(true);
+        ui->labelAnswer2->setVisible(true);
+        ui->comboBoxAnswer->setVisible(true);
+        ui->textDetail->setVisible(true);
+    }else if(m_iMode==1){
+        ui->labelAnswer->setVisible(false);
+        ui->labelAnswer2->setVisible(false);
+        ui->comboBoxAnswer->setVisible(false);
+        ui->textDetail->setVisible(false);
+    }
     //位于左侧的题目状态显示界面
     m_bgBtns = new QButtonGroup(ui->frameNav);
     for(int i=0;i<m_iChapterQCnt;i++){
@@ -146,6 +168,12 @@ void ChapterExercise::showQuestionWithSCID(int subject, int chapter, int id)
     ui->labelB->setText(q.b);
     ui->labelC->setText(q.c);
     ui->labelD->setText(q.d);
+
+    if(m_iMode==0){
+        //知识点学习模式
+        ui->comboBoxAnswer->setCurrentIndex(q.answer);
+        ui->textDetail->setText(q.explain);
+    }
 
     //显示当前题目的状态，是否是已完成
     setExistedOption();

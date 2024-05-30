@@ -15,13 +15,14 @@ class ChapterExercise : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChapterExercise(int userID,int subject,int chapter,bool status,int qnt,QWidget *parent = nullptr);
+    explicit ChapterExercise(int mode,int userID,int subject,int chapter,bool status,int qnt,QWidget *parent = nullptr);
     ~ChapterExercise();
 
     void setIsContinue(bool status);
     void setSubject(int newSubject);
     void setChapter(int newChapter);
     void setQCnt(int newCnt);
+    void setMode(int newMode);
 
     void initUI();
     void checkPreviouseNext();
@@ -62,6 +63,7 @@ private:
     int m_iQuestionID;//当前处理的问题ID
     int m_iDoneCnt;//当前已完成题数
     int m_iChapterQCnt;//当前章节总题数
+    int m_iMode;//当前模式，知识点 章节
     bool m_bIsContinue;
     QButtonGroup *m_bgBtns;//用于显示状态的按钮
     QMap<int,int> m_mQDoneMap;//统计已答题数据

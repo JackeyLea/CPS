@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>153</height>
+    <width>550</width>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,20 +30,17 @@
     <number>1</number>
    </property>
    <item row="0" column="0">
-    <widget class="QWidget" name="widgetStatus" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>240</width>
-       <height>0</height>
-      </size>
-     </property>
+    <widget class="QGroupBox" name="groupBoxStatus">
      <property name="maximumSize">
       <size>
-       <width>240</width>
+       <width>250</width>
        <height>16777215</height>
       </size>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <property name="title">
+      <string>进度</string>
+     </property>
+     <layout class="QGridLayout" name="layoutGStatus">
       <property name="leftMargin">
        <number>1</number>
       </property>
@@ -70,27 +67,31 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QGridLayout" name="layoutGInfo">
         <property name="spacing">
          <number>1</number>
         </property>
-        <property name="sizeConstraint">
-         <enum>QLayout::SetMinimumSize</enum>
-        </property>
-        <item>
+        <item row="0" column="0" colspan="8">
+         <widget class="QProgressBar" name="progressBar">
+          <property name="value">
+           <number>24</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
          <spacer name="spacerHStatusL">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>17</width>
+            <height>28</height>
            </size>
           </property>
          </spacer>
         </item>
-        <item>
+        <item row="1" column="1">
          <widget class="QPushButton" name="btnUnknown">
           <property name="enabled">
            <bool>false</bool>
@@ -116,8 +117,8 @@ background-color:gray;</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="labelUnknown">
+        <item row="1" column="2">
+         <widget class="QLabel" name="labelUndone">
           <property name="minimumSize">
            <size>
             <width>45</width>
@@ -135,7 +136,7 @@ background-color:gray;</string>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="1" column="3">
          <widget class="QPushButton" name="btnUndone">
           <property name="minimumSize">
            <size>
@@ -158,8 +159,8 @@ background-color: green;</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="labelUndone">
+        <item row="1" column="4">
+         <widget class="QLabel" name="labelCur">
           <property name="minimumSize">
            <size>
             <width>45</width>
@@ -177,7 +178,7 @@ background-color: green;</string>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="1" column="5">
          <widget class="QPushButton" name="btnDone">
           <property name="minimumSize">
            <size>
@@ -200,7 +201,7 @@ background-color: green;</string>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="1" column="6">
          <widget class="QLabel" name="labelDone">
           <property name="minimumSize">
            <size>
@@ -219,15 +220,15 @@ background-color: green;</string>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="1" column="7">
          <spacer name="spacerHStatusR">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>17</width>
+            <height>28</height>
            </size>
           </property>
          </spacer>
@@ -238,8 +239,11 @@ background-color: green;</string>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QWidget" name="widgetAnswer" native="true">
-     <layout class="QGridLayout" name="layoutGAnswer">
+    <widget class="QGroupBox" name="groupBoxItem">
+     <property name="title">
+      <string>题目</string>
+     </property>
+     <layout class="QGridLayout" name="layoutGItem">
       <property name="leftMargin">
        <number>1</number>
       </property>
@@ -256,7 +260,7 @@ background-color: green;</string>
        <number>1</number>
       </property>
       <item row="0" column="0">
-       <layout class="QGridLayout" name="layoutGQA">
+       <layout class="QGridLayout" name="layoutGQ">
         <property name="spacing">
          <number>1</number>
         </property>
@@ -282,16 +286,6 @@ background-color: green;</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QLabel" name="labelA">
-          <property name="text">
-           <string>选项A</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="0">
          <widget class="QRadioButton" name="radioBtnB">
           <property name="minimumSize">
@@ -311,16 +305,6 @@ background-color: green;</string>
           </property>
           <property name="autoExclusive">
            <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="labelB">
-          <property name="text">
-           <string>选项B</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -346,16 +330,6 @@ background-color: green;</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QLabel" name="labelC">
-          <property name="text">
-           <string>选项C</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="0">
          <widget class="QRadioButton" name="radioBtnD">
           <property name="minimumSize">
@@ -378,7 +352,47 @@ background-color: green;</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
+        <item row="7" column="0" colspan="3">
+         <widget class="QTextEdit" name="textDetail"/>
+        </item>
+        <item row="5" column="0" colspan="3">
+         <widget class="QLabel" name="labelAnswer2">
+          <property name="text">
+           <string>参考答案</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QLabel" name="labelA">
+          <property name="text">
+           <string>选项A</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="2">
+         <widget class="QLabel" name="labelB">
+          <property name="text">
+           <string>选项B</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="2">
+         <widget class="QLabel" name="labelC">
+          <property name="text">
+           <string>选项C</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="2">
          <widget class="QLabel" name="labelD">
           <property name="text">
            <string>选项D</string>
@@ -388,7 +402,7 @@ background-color: green;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" colspan="2">
+        <item row="0" column="0" colspan="3">
          <widget class="QLabel" name="labelQuestion">
           <property name="text">
            <string>问题</string>
@@ -397,6 +411,50 @@ background-color: green;</string>
            <bool>true</bool>
           </property>
          </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="labelAnswer">
+          <property name="text">
+           <string>答案：</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QComboBox" name="comboBoxAnswer">
+          <item>
+           <property name="text">
+            <string>A</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>B</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>C</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>D</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="6" column="2">
+         <spacer name="spacerHAnswer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
@@ -408,7 +466,7 @@ background-color: green;</string>
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>0</height>
+          <height>17</height>
          </size>
         </property>
        </spacer>
@@ -436,13 +494,6 @@ background-color: green;</string>
          <widget class="QPushButton" name="btnEnd">
           <property name="text">
            <string>结束刷题</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QProgressBar" name="progressBar">
-          <property name="value">
-           <number>24</number>
           </property>
          </widget>
         </item>

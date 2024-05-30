@@ -300,7 +300,7 @@ Question DBHandler::getQuestionInfo(int subjectID, int chapterID, int id)
                 q.b       = m_query.value("b").toString();
                 q.c       = m_query.value("c").toString();
                 q.d       = m_query.value("d").toString();
-                q.answer  = m_query.value("answer").toString();
+                q.answer  = m_query.value("answer").toInt();
                 q.explain = m_query.value("explain").toString();
             }
         }

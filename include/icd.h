@@ -9,12 +9,12 @@ struct Question{
     QString b;
     QString c;
     QString d;
-    QString answer;
+    int answer;
     QString explain;
 
     bool isEmpty(){
         return (desc.isEmpty() && a.isEmpty() && b.isEmpty()
-                && c.isEmpty() && d.isEmpty() && answer.isEmpty()
+                && c.isEmpty() && d.isEmpty() && (answer==-1)
                 && explain.isEmpty());
     }
 };
