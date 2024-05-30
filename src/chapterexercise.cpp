@@ -104,6 +104,7 @@ void ChapterExercise::initUI()
         ui->labelAnswer->setVisible(true);
         ui->labelAnswer2->setVisible(true);
         ui->comboBoxAnswer->setVisible(true);
+        ui->comboBoxAnswer->setEnabled(false);
         ui->textDetail->setVisible(true);
     }else if(m_iMode==1){
         ui->labelAnswer->setVisible(false);
@@ -171,7 +172,7 @@ void ChapterExercise::showQuestionWithSCID(int subject, int chapter, int id)
 
     if(m_iMode==0){
         //知识点学习模式
-        ui->comboBoxAnswer->setCurrentIndex(q.answer);
+        ui->comboBoxAnswer->setCurrentIndex(q.answer-1);
         ui->textDetail->setText(q.explain);
     }
 
