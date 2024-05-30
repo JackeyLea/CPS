@@ -75,10 +75,18 @@ void ChapterExercise::setMode(int newMode)
 void ChapterExercise::initUI()
 {
     if(m_bIsContinue){
-        // TODO 继续刷题
-    }else{
-        m_iQuestionID = 0;
+        //TODO 继续刷题 从数据库中将之前的做题记录导入至内容
+        //从数据库中获取当前科目当前章节的题目数据
     }
+
+    //清理之前的数据
+    m_iQuestionID = 0;
+    m_mQDoneMap.clear();
+    m_iQuestionID = -1;
+    m_iMinQuestionID=-1;
+    m_iMaxQuestionID = -1;
+    m_iDoneCnt=0;
+
     //获取数据库中最小有效id
     m_iMinQuestionID = DBHandler::instance()->getMinQIDSubjectChapter(m_iSubject,m_iChapter);
     if(m_iMinQuestionID==-1){

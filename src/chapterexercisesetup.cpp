@@ -80,8 +80,7 @@ void ChapterExerciseSetup::on_btnConfirm_clicked()
         return;
     }
 
-    //////显示界面部分////////////////
-    //不同模式显示的界面不同
+    //////显示界面部分 不同模式显示的界面不同////////////////
     //显示题目界面
     if(!ce){
         ce = new ChapterExercise(0,m_iUser,subjectID,chapterID,isContinue,qcnt);
