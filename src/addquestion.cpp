@@ -48,12 +48,12 @@ void AddQuestion::on_btnAdd_clicked()
     qDebug()<<"AddQuestion::on_btnAdd_clicked()"<<subjectID<<chapterID;
 
     //获取数据
-    QString desc = ui->textDesc->toHtml();
-    QString a    = ui->textA->toHtml();
-    QString b    = ui->textB->toHtml();
-    QString c    = ui->textC->toHtml();
-    QString d    = ui->textD->toHtml();
-    QString detail = ui->textDetail->toHtml();
+    QString desc = ui->textDesc->toPlainText();
+    QString a    = ui->textA->toPlainText();
+    QString b    = ui->textB->toPlainText();
+    QString c    = ui->textC->toPlainText();
+    QString d    = ui->textD->toPlainText();
+    QString detail = ui->textDetail->toPlainText();
     QString answer = ui->comboBoxAnswer->currentText();
     if(ui->textDesc->toPlainText().isEmpty()){
         QMessageBox::information(this,QString("警告"),QString("至少应该要有个问题描述吧"));

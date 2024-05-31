@@ -6,64 +6,53 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>207</width>
-    <height>125</height>
+    <width>217</width>
+    <height>195</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>模式选择</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>15</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="1" column="0">
-    <spacer name="spacerHL">
+    <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>38</width>
+       <width>40</width>
        <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
    <item row="1" column="1">
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="3" column="0">
-      <spacer name="spacerVBtn">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>18</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>1</number>
+     </property>
+     <item>
       <widget class="QPushButton" name="btnKN">
        <property name="text">
         <string>知识点学习</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="btnChapter">
-       <property name="text">
-        <string>章节刷题</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QPushButton" name="btnAdmin">
-       <property name="text">
-        <string>管理界面</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
+     <item>
       <spacer name="spacerVBtn2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -76,43 +65,57 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="btnChapter">
+       <property name="text">
+        <string>章节刷题</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacerVBtn">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>18</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAdmin">
+       <property name="text">
+        <string>管理界面</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="1" column="2">
-    <spacer name="spacerHR">
+    <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>39</width>
+       <width>40</width>
        <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="2" column="0" colspan="3">
-    <spacer name="spacerVB">
+   <item row="2" column="1">
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>189</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="0" colspan="3">
-    <spacer name="spacerVT">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>189</width>
-       <height>14</height>
+       <width>20</width>
+       <height>15</height>
       </size>
      </property>
     </spacer>

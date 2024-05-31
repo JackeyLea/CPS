@@ -181,7 +181,7 @@ void ChapterExercise::showQuestionWithSCID(int subject, int chapter, int id)
     if(m_iMode==0){
         //知识点学习模式
         ui->comboBoxAnswer->setCurrentIndex(q.answer-1);
-        ui->textDetail->setText(q.explain);
+        ui->textDetail->setPlainText(q.explain);
     }
 
     //显示当前题目的状态，是否是已完成
