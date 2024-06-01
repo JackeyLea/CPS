@@ -140,14 +140,13 @@ void WidgetAdmin::on_comboBoxChapter_currentTextChanged(const QString &text)
     int subjectID = DBHandler::instance()->getSubjectID(ui->comboBoxSubject->currentText());
     //获取章节ID
     int chapterID = DBHandler::instance()->getChapterID(subjectID,text);
-    int qcnt = DBHandler::instance()->getQCntSubjectChapter(subjectID,chapterID);
     //获取起始ID
-    int startID = DBHandler::instance()->getMinQIDSubjectChapter(subjectID,chapterID);
-    for(int i=0;i<qcnt;i++){
+    QList<int> idList = DBHandler::instance()->getIDListSubjectChapter(subjectID,chapterID);
+    for(int i=0;i<idList.count();i++){
         m_mItemModel->setItem(i,0,new QStandardItem(ui->comboBoxSubject->currentText()));
         m_mItemModel->setItem(i,1,new QStandardItem(text));
         //获取题目数据
-        Question q = DBHandler::instance()->getQuestionInfo(subjectID,chapterID,startID+i);
+        Question q = DBHandler::instance()->getQuestionInfo(subjectID,chapterID,idList.at(i));
         m_mItemModel->setItem(i,2,new QStandardItem(q.desc));
         m_mItemModel->setItem(i,3,new QStandardItem(q.a));
         m_mItemModel->setItem(i,4,new QStandardItem(q.b));

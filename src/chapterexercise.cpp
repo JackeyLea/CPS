@@ -5,7 +5,6 @@
 
 #include <QDebug>
 #include <QButtonGroup>
-#include <QResizeEvent>
 #include <QDesktopWidget>
 #include <QMessageBox>
 
@@ -15,10 +14,11 @@ ChapterExercise::ChapterExercise(int mode, int userID, int subject, int chapter,
     ,m_iUser(userID)
     ,m_iSubject(subject)
     ,m_iChapter(chapter)
-    ,m_iQuestionID(0)
+    ,m_iCurQID(-1)
     ,m_iDoneCnt(0)
     ,m_iChapterQCnt(qnt)
     ,m_iMode(mode)
+    ,m_iCurIndex(-1)
     ,m_bIsContinue(status)
 {
     ui->setupUi(this);
@@ -80,25 +80,17 @@ void ChapterExercise::initUI()
     }
 
     //清理之前的数据
-    m_iQuestionID = 0;
+    m_iCurQID = -1;
     m_mQDoneMap.clear();
-    m_iQuestionID = -1;
-    m_iMinQuestionID=-1;
-    m_iMaxQuestionID = -1;
     m_iDoneCnt=0;
 
-    //获取数据库中最小有效id
-    m_iMinQuestionID = DBHandler::instance()->getMinQIDSubjectChapter(m_iSubject,m_iChapter);
-    if(m_iMinQuestionID==-1){
-        qDebug()<<"[ERROR] [ChapterExercise::initUI] Cannot get start question id.";
-    }
-    m_iQuestionID = m_iMinQuestionID;
-
-    //获取当前章节最大ID
-    m_iMaxQuestionID = DBHandler::instance()->getMaxQIDSubjectChapter(m_iSubject,m_iChapter);
-    if(m_iMaxQuestionID==-1){
-        qDebug()<<"[ERROR] [ChapterExercise::initUI] Cannot get end question id.";
-    }
+    //从数据库获取 当前科目 当前章节 题目列表
+    m_lQList.clear();
+    m_lQList = DBHandler::instance()->getIDListSubjectChapter(m_iSubject,m_iChapter);
+    assert(m_lQList.count()==m_iChapterQCnt);
+    //开始题目ID
+    m_iCurQID = m_lQList.first();
+    m_iCurIndex =0;//当前索引
 
     //检测继续刷题状态 TODO 无法继续刷题
     // TODO使用那个记录
@@ -114,11 +106,19 @@ void ChapterExercise::initUI()
         ui->comboBoxAnswer->setVisible(true);
         ui->comboBoxAnswer->setEnabled(false);
         ui->textDetail->setVisible(true);
+        ui->radioBtnA->setEnabled(false);
+        ui->radioBtnB->setEnabled(false);
+        ui->radioBtnC->setEnabled(false);
+        ui->radioBtnD->setEnabled(false);
     }else if(m_iMode==1){
         ui->labelAnswer->setVisible(false);
         ui->labelAnswer2->setVisible(false);
         ui->comboBoxAnswer->setVisible(false);
         ui->textDetail->setVisible(false);
+        ui->radioBtnA->setEnabled(true);
+        ui->radioBtnB->setEnabled(true);
+        ui->radioBtnC->setEnabled(true);
+        ui->radioBtnD->setEnabled(true);
     }
     //位于左侧的题目状态显示界面
     m_bgBtns = new QButtonGroup(ui->frameNav);
@@ -127,14 +127,15 @@ void ChapterExercise::initUI()
         btn->setText(QString("%1").arg(i+1));
         btn->setGeometry(10+(i%5)*35,10+(i/5)*35,25,25);
         btn->setStyleSheet(QString("border:1px solid gray;background-color:gray;"));
-        m_bgBtns->addButton(btn,i);
+        //按钮的ID就是对应题目的ID
+        m_bgBtns->addButton(btn,m_lQList.at(i));
         connect(btn,&QPushButton::clicked,this,&ChapterExercise::sltBtnStatusClicked);
     }
 
     updateProcessBar();//进度条
 
     //显示问题信息
-    showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
+    showQuestionWithSCID(m_iSubject,m_iChapter,m_iCurQID);
     show();
     //设置窗口居中显示，主要是实现手动刷新一次窗口
     setGeometry(QApplication::desktop()->width() / 2 - width()/2,
@@ -146,12 +147,12 @@ void ChapterExercise::initUI()
 void ChapterExercise::checkPreviouseNext()
 {
     //上一题下一题按钮
-    if(m_iQuestionID == m_iMinQuestionID){
+    if(m_iCurQID == m_lQList.first()){
         ui->btnPrevious->setEnabled(false);
     }else{
         ui->btnPrevious->setEnabled(true);
     }
-    if(m_iQuestionID == m_iMaxQuestionID){
+    if(m_iCurQID == m_lQList.last()){
         ui->btnNext->setEnabled(false);
     }else{
         ui->btnNext->setEnabled(true);
@@ -200,18 +201,21 @@ void ChapterExercise::updateProcessBar()
 void ChapterExercise::optionChoosed(int option)
 {
     //如果某一题的答案中的任意一个选项被点击了
-    if(!m_mQDoneMap.contains(m_iQuestionID)){
-        m_mQDoneMap.insert(m_iQuestionID,option);
+    if(!m_mQDoneMap.contains(m_iCurQID)){
+        m_mQDoneMap.insert(m_iCurQID,option);
         m_iDoneCnt++;
-        setCurQStatus();
+    }else{
+        //如果已经选择过了就更新答案
+        m_mQDoneMap[m_iCurQID]=option;
     }
+    setCurQStatus();
     updateProcessBar();
 }
 //如果当前题目已经做了，显示做的结果
 void ChapterExercise::setExistedOption()
 {
-    if(m_mQDoneMap.contains(m_iQuestionID)){
-        int option = m_mQDoneMap.value(m_iQuestionID);
+    if(m_mQDoneMap.contains(m_iCurQID)){
+        int option = m_mQDoneMap.value(m_iCurQID);
         setCurQStatus();
         //设置四个按钮状态
         switch(option){
@@ -246,19 +250,20 @@ void ChapterExercise::setExistedOption()
 void ChapterExercise::setCurQStatus()
 {
     for(int i=0;i<m_iChapterQCnt;i++){
-        bool isDone=m_mQDoneMap.contains(m_iMinQuestionID+i);//完成
-        bool isCur=(m_iQuestionID==i+m_iMinQuestionID);//当前
+        bool isDone=m_mQDoneMap.contains(m_lQList.at(i));//完成
+        bool isCur=(m_iCurQID==m_lQList.at(i));//当前
+        int id = m_lQList.at(i);
         if(isDone){
             if(isCur){//当前已完成
-                m_bgBtns->button(i)->setStyleSheet(QString("border:1px solid red;\nbackground-color: green;"));
+                m_bgBtns->button(id)->setStyleSheet(QString("border:1px solid red;\nbackground-color: green;"));
             }else{//非当前已完成
-                m_bgBtns->button(i)->setStyleSheet(QString("border:1px solid gray;\nbackground-color: green;"));
+                m_bgBtns->button(id)->setStyleSheet(QString("border:1px solid gray;\nbackground-color: green;"));
             }
         }else{
             if(isCur){//当前未完成
-                m_bgBtns->button(i)->setStyleSheet(QString("border:1px solid red;\nbackground-color: gray;"));
+                m_bgBtns->button(id)->setStyleSheet(QString("border:1px solid red;\nbackground-color: gray;"));
             }else{//非当前未完成
-                m_bgBtns->button(i)->setStyleSheet(QString("border:1px solid gray;background-color:gray;"));
+                m_bgBtns->button(id)->setStyleSheet(QString("border:1px solid gray;background-color:gray;"));
             }
         }
     }
@@ -268,24 +273,26 @@ void ChapterExercise::setCurQStatus()
 void ChapterExercise::sltBtnStatusClicked()
 {
     QPushButton *btn = (QPushButton*)sender();
-    m_iQuestionID = m_bgBtns->id(btn)+1;
-    showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
+    m_iCurQID = m_bgBtns->id(btn);
+    showQuestionWithSCID(m_iSubject,m_iChapter,m_iCurQID);
     checkPreviouseNext();//点击新按钮后检查下一题按钮状态
 }
 
 void ChapterExercise::on_btnPrevious_clicked()
 {
     clearOptionStatus();//清除选项状态
-    m_iQuestionID -=1;
-    showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
+    m_iCurIndex-=1;
+    m_iCurQID =m_lQList.at(m_iCurIndex);
+    showQuestionWithSCID(m_iSubject,m_iChapter,m_iCurQID);
     checkPreviouseNext();
 }
 
 void ChapterExercise::on_btnNext_clicked()
 {
     clearOptionStatus();//清除选项状态
-    m_iQuestionID +=1;
-    showQuestionWithSCID(m_iSubject,m_iChapter,m_iQuestionID);
+    m_iCurIndex+=1;
+    m_iCurQID =m_lQList.at(m_iCurIndex);
+    showQuestionWithSCID(m_iSubject,m_iChapter,m_iCurQID);
     checkPreviouseNext();
     setCurQStatus();
 }
@@ -333,9 +340,9 @@ void ChapterExercise::on_btnEnd_clicked()
     if(btn==QMessageBox::Yes){
         //保存记录
         for(int i=0;i<m_mQDoneMap.count();i++){
-            bool status = DBHandler::instance()->saveQuestionRecord(m_iUser,m_iSubject,m_iChapter,m_iMinQuestionID+i,m_mQDoneMap.value(m_iMinQuestionID+i));
+            bool status = DBHandler::instance()->saveQuestionRecord(m_iUser,m_iSubject,m_iChapter,m_lQList.at(i),m_mQDoneMap.value(m_lQList.at(i)));
             if(!status){
-                qDebug()<<"save record failed: "<<m_iMinQuestionID+i;
+                qDebug()<<"save record failed: "<<m_lQList.at(i);
             }
         }
     }

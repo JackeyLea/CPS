@@ -223,47 +223,30 @@ int DBHandler::getQCntSubjectChapter(int subjectID, int chapterID)
     return cnt;
 }
 
-int DBHandler::getMinQIDSubjectChapter(int subjectID, int chapterID)
+QList<int> DBHandler::getIDListSubjectChapter(int subjectID, int chapterID)
 {
-    int id = -1;
+    QList<int> r;
+
+    if(subjectID==-1 || chapterID==-1) return r;
 
     //检测表
-    if(!isTableExists("questions")) return id;
+    if(!isTableExists("questions")) return r;
 
     if(m_db.isOpen()){
-        QString sql = QString("select min(id) from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
+        QString sql = QString("select id from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
         if(m_query.exec(sql)){
             while(m_query.next()){
-                id = m_query.value("min(id)").toInt();
+                r.append(m_query.value("id").toInt());
             }
         }
     }
 
-    return id;
-}
-
-int DBHandler::getMaxQIDSubjectChapter(int subjectID, int chapterID)
-{
-    int id = -1;
-
-    //检测表
-    if(!isTableExists("questions")) return id;
-
-    if(m_db.isOpen()){
-        QString sql = QString("select max(id) from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
-        if(m_query.exec(sql)){
-            while(m_query.next()){
-                id = m_query.value("max(id)").toInt();
-            }
-        }
-    }
-
-    return id;
+    return r;
 }
 
 bool DBHandler::insertQuestion(int subjectID,int chapterID,
                                QString desc,QString a,QString b,QString c,QString d,
-                               QString answer,QString detail)
+                               int answer,QString detail)
 {
     bool r=false;
 

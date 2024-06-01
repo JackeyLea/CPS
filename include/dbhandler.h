@@ -35,10 +35,9 @@ public:
 
     int getQCntSubject(int subjectID);
     int getQCntSubjectChapter(int subjectID,int chapterID);
-    int getMinQIDSubjectChapter(int subjectID,int chapterID);
-    int getMaxQIDSubjectChapter(int subjectID,int chapterID);
+    QList<int> getIDListSubjectChapter(int subjectID,int chapterID);
 
-    bool insertQuestion(int subjectID, int chapterID, QString desc, QString a, QString b, QString c, QString d, QString answer, QString detail);
+    bool insertQuestion(int subjectID, int chapterID, QString desc, QString a, QString b, QString c, QString d, int answer, QString detail);
 
     Question getQuestionInfo(int subjectID,int chapterID,int id);
 

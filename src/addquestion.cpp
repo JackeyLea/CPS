@@ -35,7 +35,6 @@ void AddQuestion::on_comboBoxSubject_currentTextChanged(const QString &text)
     ui->comboBoxChapter->addItems(chapterList);
 }
 
-
 void AddQuestion::on_btnAdd_clicked()
 {
     //先判断数据有效性
@@ -54,7 +53,7 @@ void AddQuestion::on_btnAdd_clicked()
     QString c    = ui->textC->toPlainText();
     QString d    = ui->textD->toPlainText();
     QString detail = ui->textDetail->toPlainText();
-    QString answer = ui->comboBoxAnswer->currentText();
+    int answer = ui->comboBoxAnswer->currentIndex()+1;
     if(ui->textDesc->toPlainText().isEmpty()){
         QMessageBox::information(this,QString("警告"),QString("至少应该要有个问题描述吧"));
         return;

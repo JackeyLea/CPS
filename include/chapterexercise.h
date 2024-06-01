@@ -55,18 +55,18 @@ private slots:
 private:
     Ui::ChapterExercise *ui;
 
-    int m_iUser;//用户id
-    int m_iSubject;
-    int m_iChapter;
-    int m_iMinQuestionID;//当前章节最小ID
-    int m_iMaxQuestionID;//当前章节最大ID
-    int m_iQuestionID;//当前处理的问题ID
+    int m_iUser;//当前用户id
+    int m_iSubject;//当前科目ID
+    int m_iChapter;//当前章节ID
+    int m_iCurQID;//当前处理的问题ID
     int m_iDoneCnt;//当前已完成题数
     int m_iChapterQCnt;//当前章节总题数
     int m_iMode;//当前模式，知识点 章节
-    bool m_bIsContinue;
+    int m_iCurIndex;//当前题目ID在m_lQList中所处的索引位置
+    bool m_bIsContinue;//是否是继续刷题
     QButtonGroup *m_bgBtns;//用于显示状态的按钮
-    QMap<int,int> m_mQDoneMap;//统计已答题数据
+    QMap<int,int> m_mQDoneMap;//统计已答题数据 题目ID-对应选择的答案
+    QList<int> m_lQList;//当前科目当前章节题目列表
 };
 
 #endif // CHAPTEREXERCISE_H
