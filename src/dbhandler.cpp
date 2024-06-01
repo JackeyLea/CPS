@@ -353,6 +353,29 @@ bool DBHandler::saveQuestionRecord(int user, int subject, int chapter, int quest
 
     return r;
 }
+//通过科目和章节获取用户的做题记录
+QMap<int, int> DBHandler::getQRecord(int user, int subject, int chapter)
+{
+    QMap<int,int> r;
+
+    //检测表
+    if(!isTableExists("records")) return r;
+
+    if(user==-1 || subject==-1 || chapter==-1 ) return r;
+
+    if(m_db.isOpen()){
+        QString sql=QString("select question,answer from records where user=%1 and subject=%2 and chapter=%3;").arg(user).arg(subject).arg(chapter);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                int id= m_query.value("question").toInt();
+                int answer= m_query.value("answer").toInt();
+                r.insert(id,answer);
+            }
+        }
+    }
+
+    return r;
+}
 
 void DBHandler::connect2db()
 {

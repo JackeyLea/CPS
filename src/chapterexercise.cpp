@@ -74,11 +74,6 @@ void ChapterExercise::setMode(int newMode)
 
 void ChapterExercise::initUI()
 {
-    if(m_bIsContinue){
-        //TODO 继续刷题 从数据库中将之前的做题记录导入至内容
-        //从数据库中获取当前科目当前章节的题目数据
-    }
-
     //清理之前的数据
     m_iCurQID = -1;
     m_mQDoneMap.clear();
@@ -92,8 +87,11 @@ void ChapterExercise::initUI()
     m_iCurQID = m_lQList.first();
     m_iCurIndex =0;//当前索引
 
-    //检测继续刷题状态 TODO 无法继续刷题
-    // TODO使用那个记录
+    if(m_bIsContinue){
+        // 从数据库中将之前当前科目当前章节的做题记录导入至内容
+        // TODO 使用哪个记录
+        m_mQDoneMap = DBHandler::instance()->getQRecord(m_iUser,m_iSubject,m_iChapter);
+    }
 
     //////////////////////////界面显示部分////////////////////////////
     if(m_iMode==-1){
