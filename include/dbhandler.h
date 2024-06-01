@@ -44,6 +44,13 @@ public:
     bool saveQuestionRecord(int user,int subject,int chapter,int question,int answer);
 
     QMap<int,int> getQRecord(int user,int subject,int chapter);
+
+    ///
+    /// \brief clearQRecord 清空指定用户 指定科目 指定章节的历史做题记录
+    /// \param user 用户ID
+    /// \param subject 科目ID
+    /// \param chapter 章节ID
+    ///
     void clearQRecord(int user,int subject,int chapter);
 
 protected:

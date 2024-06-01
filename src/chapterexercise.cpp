@@ -8,22 +8,22 @@
 #include <QDesktopWidget>
 #include <QMessageBox>
 
-ChapterExercise::ChapterExercise(int mode, int userID, int subject, int chapter, bool status, int qnt, QWidget *parent)
+ChapterExercise::ChapterExercise(int mode, int userID, int subjectID, int chapterID, bool status, int qcnt, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ChapterExercise)
     ,m_iUser(userID)
-    ,m_iSubject(subject)
-    ,m_iChapter(chapter)
+    ,m_iSubject(subjectID)
+    ,m_iChapter(chapterID)
     ,m_iCurQID(-1)
     ,m_iDoneCnt(0)
-    ,m_iChapterQCnt(qnt)
+    ,m_iChapterQCnt(qcnt)
     ,m_iMode(mode)
     ,m_iCurIndex(-1)
     ,m_bIsContinue(status)
 {
     ui->setupUi(this);
     qDebug()<<QString("[Info] [ChapterExercies::ChapterExercise] subject id %1,chapter id %2,status %3")
-                    .arg(subject).arg(chapter).arg(status);
+                    .arg(subjectID).arg(chapterID).arg(status);
 }
 
 ChapterExercise::~ChapterExercise()

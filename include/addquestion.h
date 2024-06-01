@@ -15,6 +15,9 @@ public:
     explicit AddQuestion(QWidget *parent = nullptr);
     ~AddQuestion();
 
+    ///
+    /// \brief initUI 初始化界面
+    ///
     void initUI();
 
 private slots:

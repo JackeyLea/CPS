@@ -15,7 +15,17 @@ class ChapterExercise : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChapterExercise(int mode,int userID,int subject,int chapter,bool status,int qnt,QWidget *parent = nullptr);
+    ///
+    /// \brief ChapterExercise 构造函数
+    /// \param mode 当前模式：知识点学习、章节练习
+    /// \param userID 用户ID
+    /// \param subjectID 科目ID
+    /// \param chapterID 章节ID
+    /// \param status 状态 全新练习 继续练习
+    /// \param qcnt 当前科目 当前章节 题目数量
+    /// \param parent 父窗口
+    ///
+    explicit ChapterExercise(int mode,int userID,int subjectID,int chapterID,bool status,int qcnt,QWidget *parent = nullptr);
     ~ChapterExercise();
 
     void setIsContinue(bool status);
@@ -37,6 +47,7 @@ public:
 
 protected slots:
     void sltBtnStatusClicked();
+
 private slots:
     void on_btnPrevious_clicked();
 
