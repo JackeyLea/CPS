@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>623</width>
-    <height>612</height>
+    <width>700</width>
+    <height>613</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -171,6 +171,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelSimiliar">
+       <property name="text">
+        <string>最高相似度：0%</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnAdd">
