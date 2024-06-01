@@ -44,6 +44,7 @@ public:
     bool saveQuestionRecord(int user,int subject,int chapter,int question,int answer);
 
     QMap<int,int> getQRecord(int user,int subject,int chapter);
+    void clearQRecord(int user,int subject,int chapter);
 
 protected:
     void connect2db();

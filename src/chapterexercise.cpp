@@ -88,9 +88,13 @@ void ChapterExercise::initUI()
     m_iCurIndex =0;//当前索引
 
     if(m_bIsContinue){
-        // 从数据库中将之前当前科目当前章节的做题记录导入至内容
+        //继续练习 从数据库中将之前的当前科目 当前章节 当前用户的做题记录导入至内容
         // TODO 使用哪个记录
         m_mQDoneMap = DBHandler::instance()->getQRecord(m_iUser,m_iSubject,m_iChapter);
+    }else{
+        //重新开始练习
+        //如果当前用户 当前科目 当前章节有历史刷题记录就清空
+        DBHandler::instance()->clearQRecord(m_iUser,m_iSubject,m_iChapter);
     }
 
     //////////////////////////界面显示部分////////////////////////////

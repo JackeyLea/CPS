@@ -376,6 +376,21 @@ QMap<int, int> DBHandler::getQRecord(int user, int subject, int chapter)
 
     return r;
 }
+//清空指定用户 指定科目 指定章节的历史做题记录
+void DBHandler::clearQRecord(int user, int subject, int chapter)
+{
+    //检测表
+    if(!isTableExists("records")) return;
+
+    if(user==-1 || subject==-1 || chapter==-1 ) return;
+
+    if(m_db.isOpen()){
+        QString sql=QString("delete from records where user=%1 and subject=%2 and chapter=%3;").arg(user).arg(subject).arg(chapter);
+        if(!m_query.exec(sql)){
+            qDebug()<<"[ERROR] Cannot clear history records."<<m_query.lastError();
+        }
+    }
+}
 
 void DBHandler::connect2db()
 {
