@@ -79,21 +79,13 @@ void ChapterExercise::initUI()
     m_mQDoneMap.clear();
     m_iDoneCnt=0;
 
-    //从数据库获取 当前科目 当前章节 题目列表
-    m_lQList.clear();
-    m_lQList = DBHandler::instance()->getIDListSubjectChapter(m_iSubject,m_iChapter);
-    assert(m_lQList.count()==m_iChapterQCnt);
-    //开始题目ID
-    m_iCurQID = m_lQList.first();
-    m_iCurIndex =0;//当前索引
-
+    //如果是继续刷题就需要获取历史记录
     if(m_bIsContinue){
         //继续练习 从数据库中将之前的当前科目 当前章节 当前用户的做题记录导入至内容
         // TODO 使用哪个记录
         m_mQDoneMap = DBHandler::instance()->getQRecord(m_iUser,m_iSubject,m_iChapter);
     }else{
-        //重新开始练习
-        //如果当前用户 当前科目 当前章节有历史刷题记录就清空
+        //重新开始练习。如果当前用户 当前科目 当前章节有历史刷题记录就清空
         DBHandler::instance()->clearQRecord(m_iUser,m_iSubject,m_iChapter);
     }
 
@@ -103,6 +95,7 @@ void ChapterExercise::initUI()
         return;
     }
     if(m_iMode ==0){//知识点
+        setWindowTitle("知识点学习");
         ui->labelAnswer->setVisible(true);
         ui->labelAnswer2->setVisible(true);
         ui->comboBoxAnswer->setVisible(true);
@@ -112,7 +105,16 @@ void ChapterExercise::initUI()
         ui->radioBtnB->setEnabled(false);
         ui->radioBtnC->setEnabled(false);
         ui->radioBtnD->setEnabled(false);
+
+        //从数据库获取 当前科目 当前章节 题目列表
+        m_lQList.clear();
+        m_lQList = DBHandler::instance()->getIDListSubjectChapter(m_iSubject,m_iChapter);
+        assert(m_lQList.count()==m_iChapterQCnt);
+        //开始题目ID
+        m_iCurQID = m_lQList.first();
+        m_iCurIndex =0;//当前索引
     }else if(m_iMode==1){
+        setWindowTitle("章节刷题");
         ui->labelAnswer->setVisible(false);
         ui->labelAnswer2->setVisible(false);
         ui->comboBoxAnswer->setVisible(false);
@@ -121,6 +123,31 @@ void ChapterExercise::initUI()
         ui->radioBtnB->setEnabled(true);
         ui->radioBtnC->setEnabled(true);
         ui->radioBtnD->setEnabled(true);
+
+        //从数据库获取 当前科目 当前章节 题目列表
+        m_lQList.clear();
+        m_lQList = DBHandler::instance()->getIDListSubjectChapter(m_iSubject,m_iChapter);
+        assert(m_lQList.count()==m_iChapterQCnt);
+        //开始题目ID
+        m_iCurQID = m_lQList.first();
+        m_iCurIndex =0;//当前索引
+    }else if(m_iMode==2){
+        setWindowTitle("错题再练");
+        ui->labelAnswer->setVisible(false);
+        ui->labelAnswer2->setVisible(false);
+        ui->comboBoxAnswer->setVisible(false);
+        ui->textDetail->setVisible(false);
+        ui->radioBtnA->setEnabled(true);
+        ui->radioBtnB->setEnabled(true);
+        ui->radioBtnC->setEnabled(true);
+        ui->radioBtnD->setEnabled(true);
+
+        //从数据库获取 当前科目 当前章节 题目列表
+        m_lQList.clear();
+        m_lQList = DBHandler::instance()->getErrorQIDListSubjectChapter(m_iUser,m_iSubject,m_iChapter);
+        //到此处时，错题一定有，没有的情况再之前判断
+        m_iCurQID = m_lQList.first();
+        m_iCurIndex =0;//当前索引
     }
     //位于左侧的题目状态显示界面
     m_bgBtns = new QButtonGroup(ui->frameNav);

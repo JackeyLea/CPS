@@ -66,3 +66,13 @@ void WidgetType::on_btnKN_clicked()
     ceSetup->setMode(0);
     ceSetup->initUI();
 }
+
+void WidgetType::on_btnWrong_clicked()
+{
+    if(!ceSetup){
+        ceSetup = new ChapterExerciseSetup(m_iUserID);
+    }
+    ceSetup->setMode(2);
+    ceSetup->initUI();
+}
+

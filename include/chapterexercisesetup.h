@@ -18,6 +18,10 @@ public:
     explicit ChapterExerciseSetup(int userId,QWidget *parent = nullptr);
     ~ChapterExerciseSetup();
 
+    ///
+    /// \brief setMode 设置模式
+    /// \param mode 模式 0知识点 1章节 2错题
+    ///
     void setMode(int mode);
 
     void initUI();

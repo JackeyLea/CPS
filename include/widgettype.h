@@ -29,6 +29,8 @@ private slots:
 
     void on_btnKN_clicked();
 
+    void on_btnWrong_clicked();
+
 private:
     Ui::WidgetType *ui;
 

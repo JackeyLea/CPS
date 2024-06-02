@@ -35,7 +35,21 @@ public:
 
     int getQCntSubject(int subjectID);
     int getQCntSubjectChapter(int subjectID,int chapterID);
+    ///
+    /// \brief getIDListSubjectChapter 获取指定科目 指定章节的题目列表
+    /// \param subjectID 科目ID
+    /// \param chapterID 章节ID
+    /// \return 指定科目 指定章节的题目列表
+    ///
     QList<int> getIDListSubjectChapter(int subjectID,int chapterID);
+
+    ///
+    /// \brief getErrorQIDListSubjectChapter 获取指定科目 指定章节的错题题目列表
+    /// \param subjectID 科目ID
+    /// \param chapterID 章节ID
+    /// \return 指定科目 指定章节的错题题目列表
+    ///
+    QList<int> getErrorQIDListSubjectChapter(int user,int subjectID,int chapterID);
 
     bool insertQuestion(int subjectID, int chapterID, QString desc, QString a, QString b, QString c, QString d, int answer, QString detail);
 

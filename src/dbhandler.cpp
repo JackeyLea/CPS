@@ -244,6 +244,44 @@ QList<int> DBHandler::getIDListSubjectChapter(int subjectID, int chapterID)
     return r;
 }
 
+QList<int> DBHandler::getErrorQIDListSubjectChapter(int user, int subjectID, int chapterID)
+{
+    QMap<int,int> idStatusMap;
+    QList<int> r;
+
+    if(subjectID==-1 || chapterID==-1) return r;
+
+    //检测表
+    if(!isTableExists("questions")) return r;
+    if(!isTableExists("records")) return r;
+
+    if(m_db.isOpen()){
+        //获取所有ID
+        QString sql = QString("select id,answer from questions where subject=%1 and chapter=%2").arg(subjectID).arg(chapterID);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                idStatusMap.insert(m_query.value("id").toInt(),m_query.value("answer").toInt());
+            }
+        }
+
+        //获取做题历史
+        sql = QString("select question,answer from records where user=%2 and subject=%3 and chapter=%4;").arg(user).arg(subjectID).arg(chapterID);
+        if(m_query.exec(sql)){
+            while(m_query.next()){
+                int qid = m_query.value("question").toInt();
+                int answer=m_query.value("answer").toInt();
+                if(idStatusMap.contains(qid)){
+                    if(idStatusMap.value(qid)!=answer){
+                        r.append(qid);
+                    }
+                }
+            }
+        }
+    }
+
+    return r;
+}
+
 bool DBHandler::insertQuestion(int subjectID,int chapterID,
                                QString desc,QString a,QString b,QString c,QString d,
                                int answer,QString detail)

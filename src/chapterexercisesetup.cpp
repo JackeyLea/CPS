@@ -45,6 +45,9 @@ void ChapterExerciseSetup::initUI()
     case 1:
         setWindowTitle(QString("章节练习"));
         break;
+    case 2:
+        setWindowTitle(QString("错题练习"));
+        break;
     }
 
     show();
@@ -89,6 +92,14 @@ void ChapterExerciseSetup::on_btnConfirm_clicked()
         ce->setMode(0);
     }else if(m_iMode==1){//此模式对应刷题
         ce->setMode(1);
+    }else if(m_iMode==2){//错题练习模式
+        QList<int> errorQID = DBHandler::instance()->getErrorQIDListSubjectChapter(m_iUser,subjectID,chapterID);
+        //开始题目ID
+        if(errorQID.count()==0) {
+            QMessageBox::information(this,QString("警告"),QString("无错题可以练习"));
+            return;
+        }
+        ce->setMode(2);
     }
     ce->setSubject(subjectID);
     ce->setChapter(chapterID);
