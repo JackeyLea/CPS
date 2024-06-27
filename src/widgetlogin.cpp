@@ -74,3 +74,10 @@ void WidgetLogin::on_btnRegister_clicked()
         QMessageBox::information(this,QString("提示"),QString("用户已存在"));
     }
 }
+
+void WidgetLogin::on_btnClear_clicked()
+{
+    ui->lineName->clear();
+    ui->linePWD->clear();
+}
+

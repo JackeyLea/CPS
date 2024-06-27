@@ -24,6 +24,8 @@ private slots:
 
     void on_btnRegister_clicked();
 
+    void on_btnClear_clicked();
+
 private:
     Ui::WidgetLogin *ui;
 

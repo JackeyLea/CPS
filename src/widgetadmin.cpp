@@ -73,6 +73,8 @@ void WidgetAdmin::initUI()
     m_mUserModel->setHorizontalHeaderItem(0,new QStandardItem("用户名"));
     m_mUserModel->setHorizontalHeaderItem(1,new QStandardItem("密码"));
 
+    //填充用户表数据
+
     show();
 }
 
