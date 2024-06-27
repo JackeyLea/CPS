@@ -23,6 +23,7 @@ SOURCES += \
     src/chapterexercisesetup.cpp \
     src/dbhandler.cpp \
     src/main.cpp \
+    src/textsimilarity.cpp \
     src/widgetlogin.cpp \
     src/sha512.cpp \
     src/widgetadmin.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     include/chapterexercise.h \
     include/chapterexercisesetup.h \
     include/dbhandler.h \
+    include/textsimilarity.h \
     include/widgetlogin.h \
     include/sha512.h \
     include/widgetadmin.h \
