@@ -2,13 +2,23 @@
 
 using namespace std;
 
-TextSimilarity::TextSimilarity() //¶¨Òå¹¹Ôìº¯Êı
+TextSimilarity* TextSimilarity::s_instance = nullptr;
+
+TextSimilarity::TextSimilarity() //å®šä¹‰æ„é€ å‡½æ•°
 	:_jieba(DICT_PATH, HMM_PATH, USER_DICT_PATH, IDF_PATH, STOP_WORD_PATH), _maxWordNumber(100)
 {
 	getStopWordTable(STOP_WORD_PATH.c_str());
 }
+
+TextSimilarity *TextSimilarity::instance()
+{
+    if(!s_instance){
+        s_instance = new TextSimilarity();
+    }
+    return s_instance;
+}
 	
-void TextSimilarity::getStopWordTable(const char* stopWordFile)  //µÃµ½Í£ÓÃ´Ê±í
+void TextSimilarity::getStopWordTable(const char* stopWordFile)  //å¾—åˆ°åœç”¨è¯è¡¨
 {
 	ifstream isf(stopWordFile);
 	if (!isf.is_open())
@@ -29,58 +39,49 @@ void TextSimilarity::getStopWordTable(const char* stopWordFile)  //µÃµ½Í£ÓÃ´Ê±í
 	isf.close();
 }
 
-unordered_map<string, int> TextSimilarity::getWordFreq(const char* filename)  //µÃµ½´ÊÆµ
+unordered_map<string, int> TextSimilarity::getWordFreq(const char* text)  //å¾—åˆ°è¯é¢‘
 {
-	ifstream fln(filename);
-	if (!fln.is_open())
-	{
-		cout << "open file:" << filename << "failed";
-		return unordered_map<string, int>();
-	}
-
 	string line;
 	unordered_map<string, int> wf;
 
-	while (!fln.eof())
-	{
-		getline(fln, line);
-		// GBK --> UTF8
-		line = gbk_utf8(line);
-		vector<string> words;
-		// ¶ÔÎÄ±¾µ±Ç°ĞĞ·Ö´Ê
-		_jieba.Cut(line, words, true);
-		// Í³¼Æ´ÊÆµ
-		for (const auto& e : words)
-		{
-			// È¥µôÍ£ÓÃ´Ê
-			if (stopWordSet.count(e) > 0)  //countº¯ÊıÈç¹ûsetÖĞÓĞÕâ¸ö´Ê¾Í·µ»Ø1
-				continue;
-			else
-			{
-				// Í³¼Æ´ÊÆµ
-				if (wf.count(e) > 0)
-					wf[e]++;
-				else
-					wf[e] = 1;
-			}
-		}
-	}
+    // GBK --> UTF8
+    line = gbk_utf8(text);
+
+    vector<string> words;
+    // å¯¹æ–‡æœ¬å½“å‰è¡Œåˆ†è¯
+    _jieba.Cut(line, words, true);
+    // ç»Ÿè®¡è¯é¢‘
+    for (const auto& e : words)
+    {
+        // å»æ‰åœç”¨è¯
+        if (stopWordSet.count(e) > 0)  //countå‡½æ•°å¦‚æœsetä¸­æœ‰è¿™ä¸ªè¯å°±è¿”å›1
+            continue;
+        else
+        {
+            // ç»Ÿè®¡è¯é¢‘
+            if (wf.count(e) > 0)
+                wf[e]++;
+            else
+                wf[e] = 1;
+        }
+    }
+    std::cout<<wf<<std::endl;
 	return wf;
 }
 
-bool cmpReverse(pair<string, int> lp, pair<string, int> rp)  //±È½Ïº¯Êı
+bool cmpReverse(pair<string, int> lp, pair<string, int> rp)  //æ¯”è¾ƒå‡½æ•°
 {
 	return lp.second > rp.second;
 }
 
-vector<pair<string, int>> TextSimilarity::sortByValueReverse(unordered_map<string, int>& wf) //ÅÅĞòº¯Êı£¨°´ÕÕ½µĞòÅÅÁĞ£©
+vector<pair<string, int>> TextSimilarity::sortByValueReverse(unordered_map<string, int>& wf) //æ’åºå‡½æ•°ï¼ˆæŒ‰ç…§é™åºæ’åˆ—ï¼‰
 {
 	vector<pair<string, int>> wfvector(wf.begin(), wf.end());
 	sort(wfvector.begin(), wfvector.end(), cmpReverse);
 	return wfvector;
 }
 
-void TextSimilarity::selectAimWords(vector<pair<string, int>>&wfvec, unordered_set<string>& wset)  //½«ÅÅĞòºÃµÄÔªËØ·ÅÈësetÖĞ
+void TextSimilarity::selectAimWords(vector<pair<string, int>>&wfvec, unordered_set<string>& wset)  //å°†æ’åºå¥½çš„å…ƒç´ æ”¾å…¥setä¸­
 {
 	int len = wfvec.size();
 	int sz = len > _maxWordNumber ? _maxWordNumber : len;
@@ -90,9 +91,9 @@ void TextSimilarity::selectAimWords(vector<pair<string, int>>&wfvec, unordered_s
 	}
 }
 
-vector<double> TextSimilarity::getOneHot(unordered_set<string>& wset, unordered_map<string, int>& wf)  //¹¹½¨ÔªËØÏòÁ¿
+vector<double> TextSimilarity::getOneHot(unordered_set<string>& wset, unordered_map<string, int>& wf)  //æ„å»ºå…ƒç´ å‘é‡
 {
-	//±éÀúwsetÖĞµÄÃ¿Ò»¸ö´Ê
+	//éå†wsetä¸­çš„æ¯ä¸€ä¸ªè¯
 	vector<double> oneHot;
 	for (const auto& e : wset)
 	{
@@ -104,7 +105,7 @@ vector<double> TextSimilarity::getOneHot(unordered_set<string>& wset, unordered_
 	return oneHot;
 }
 
-double TextSimilarity::cosine(vector<double> oneHot1, vector<double> oneHot2)  //ÇóÁ½¸öÏòÁ¿µÄÏàËÆ¶È
+double TextSimilarity::cosine(vector<double> oneHot1, vector<double> oneHot2)  //æ±‚ä¸¤ä¸ªå‘é‡çš„ç›¸ä¼¼åº¦
 {
 	double modular1 = 0, modular2 = 0;
 	double products = 0;
@@ -132,7 +133,7 @@ double TextSimilarity::cosine(vector<double> oneHot1, vector<double> oneHot2)  /
 
 string TextSimilarity::gbk_utf8(string str)
 {
-	//»ñÈ¡buffer´óĞ¡
+	//è·å–bufferå¤§å°
 	int len = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);
 	wchar_t* wstr = new wchar_t[len];
 	//GBK-->UTF16
@@ -158,7 +159,7 @@ string TextSimilarity::gbk_utf8(string str)
 
 string TextSimilarity::utf8_gbk(string str)
 {
-	//»ñÈ¡buffer´óĞ¡
+	//è·å–bufferå¤§å°
 	int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
 	wchar_t* wstr = new wchar_t[len];
 	//utf8-->utf16
@@ -186,31 +187,31 @@ string TextSimilarity::utf8_gbk(string str)
 	return out;
 }
 
-double TextSimilarity::GetCosine(const char* txt1, const char* txt2)  //½«ËùÓĞº¯Êı·â×°³ÉÒ»¸ö½Ó¿Ú£¬ÇóÁ½¸öÎÄµµµÄÎÄ±¾ÏàËÆ¶È
+double TextSimilarity::GetCosine(const char* txt1, const char* txt2)  //å°†æ‰€æœ‰å‡½æ•°å°è£…æˆä¸€ä¸ªæ¥å£ï¼Œæ±‚ä¸¤ä¸ªæ–‡æ¡£çš„æ–‡æœ¬ç›¸ä¼¼åº¦
 {
-	TextSimilarity tsy;  //¹¹½¨¶ÔÏó
-	unordered_map<string, int> wfg1;  //ÎÄµµ1µÄ´ÊÆµ
-	unordered_map<string, int> wfg2;  //ÎÄµµ2µÄ´ÊÆµ
+	unordered_map<string, int> wfg1;  //æ–‡æ¡£1çš„è¯é¢‘
+	unordered_map<string, int> wfg2;  //æ–‡æ¡£2çš„è¯é¢‘
 	const char* test1 = txt1;
 	const char* test2 = txt2;
 
-	wfg1 = tsy.getWordFreq(test1);
-	wfg2 = tsy.getWordFreq(test2);
+    wfg1 = getWordFreq(test1);
+    wfg2 = getWordFreq(test2);
+    if(wfg1.empty() || wfg2.empty()) return -1;
 
-	vector<pair<string, int>> v1 = tsy.sortByValueReverse(wfg1);  //½«ÎÄµµ1µÃµ½µÄ´ÊÆµ½øĞĞÅÅĞò
-	vector<pair<string, int>> v2 = tsy.sortByValueReverse(wfg2);  //½«ÎÄµµ2µÃµ½µÄ´ÊÆµ½øĞĞÅÅĞò
+    vector<pair<string, int>> v1 = sortByValueReverse(wfg1);  //å°†æ–‡æ¡£1å¾—åˆ°çš„è¯é¢‘è¿›è¡Œæ’åº
+    vector<pair<string, int>> v2 = sortByValueReverse(wfg2);  //å°†æ–‡æ¡£2å¾—åˆ°çš„è¯é¢‘è¿›è¡Œæ’åº
 
-	unordered_set<string> wset1;  //ÓÃÀ´´æÎÄµµ1ÖĞÅÅĞòºÃµÄÔªËØ
-	unordered_set<string> wset2;  //ÓÃÀ´´æÎÄµµ2ÖĞÅÅĞòºÅµÄÔªËØ
-	tsy.selectAimWords(v1, wset1);
-	tsy.selectAimWords(v2, wset2); //ÕâÁ½¸öº¯ÊıÓÃÀ´½«vectorÖĞµÄÔªËØ´æµ½setÖĞ£¬¹¹½¨´ÊÆµÏòÁ¿
+	unordered_set<string> wset1;  //ç”¨æ¥å­˜æ–‡æ¡£1ä¸­æ’åºå¥½çš„å…ƒç´ 
+	unordered_set<string> wset2;  //ç”¨æ¥å­˜æ–‡æ¡£2ä¸­æ’åºå·çš„å…ƒç´ 
+    selectAimWords(v1, wset1);
+    selectAimWords(v2, wset2); //è¿™ä¸¤ä¸ªå‡½æ•°ç”¨æ¥å°†vectorä¸­çš„å…ƒç´ å­˜åˆ°setä¸­ï¼Œæ„å»ºè¯é¢‘å‘é‡
 
 
 	vector<double> vd1;
 	vector<double> vd2;
-	vd1 = tsy.getOneHot(wset1, wfg1);  //ÄÃµ½ÎÄµµ1µÄ¹¹½¨ºÃµÄ´ÊÆµÏòÁ¿
-	vd2 = tsy.getOneHot(wset2, wfg2); //ÄÃµ½ÎÄµµ2µÄ¹¹½¨ºÃµÄ´ÊÆµÏòÁ¿ 
+    vd1 = getOneHot(wset1, wfg1);  //æ‹¿åˆ°æ–‡æ¡£1çš„æ„å»ºå¥½çš„è¯é¢‘å‘é‡
+    vd2 = getOneHot(wset2, wfg2); //æ‹¿åˆ°æ–‡æ¡£2çš„æ„å»ºå¥½çš„è¯é¢‘å‘é‡
 
-	double res = tsy.cosine(vd1, vd2);   //¼ÆËãÁ½¸öÎÄ±¾µÄÎÄ±¾ÏàËÆ¶È
+    double res = cosine(vd1, vd2);   //è®¡ç®—ä¸¤ä¸ªæ–‡æœ¬çš„æ–‡æœ¬ç›¸ä¼¼åº¦
 	return res;
 }

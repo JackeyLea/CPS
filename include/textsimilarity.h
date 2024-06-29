@@ -1,14 +1,13 @@
 #pragma once
-#include<unordered_map>
-#include<fstream>
-#include<algorithm>
+#include <unordered_map>
+#include <fstream>
+#include <algorithm>
 #include <iostream>
 #include <string>
-#include<windows.h>
-#include<cassert>
-#include<set>
-#include<unordered_set>
-#include<vector>
+#include <windows.h>
+#include <set>
+#include <unordered_set>
+#include <vector>
 #include "cppjieba/Jieba.hpp"
 
 using namespace std;
@@ -28,8 +27,10 @@ public:
 	
 	TextSimilarity();
 
+    static TextSimilarity *instance();
+
 	void getStopWordTable(const char* stopWordFile);
-	unordered_map<string, int> getWordFreq(const char* file);  //统计出词频
+    unordered_map<string, int> getWordFreq(const char* text);  //统计出词频
 
 	vector<pair<string, int>> sortByValueReverse(unordered_map<string, int>& wf); //排序
 
@@ -43,7 +44,7 @@ public:
 
 	double GetCosine(const char* txt1, const char* txt2);
 private:
-
+    static TextSimilarity* s_instance;
 	//定义一个jieba对象
 	cppjieba::Jieba _jieba;
 	unordered_set<string> stopWordSet;
