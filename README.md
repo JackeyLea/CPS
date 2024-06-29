@@ -7,3 +7,4 @@ Common Paper System 通用题库系统
 - <a href="https://github.com/yanyiwu/cppjieba" target="_blank">cppjieba</a>
 - <a href="https://github.com/noahyzhang/TextSimilarityAnalyse" target="_blank">TextSimilarityAnalyse</a>
 - <a href="https://github.com/yanyiwu/limonp" target="_blank">limonp</a>
+- <a href="https://github.com/google/glog" target="_blank">google log</a>
