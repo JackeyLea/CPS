@@ -16,6 +16,11 @@ UI_DIR  = ui
 OBJECTS_DIR = objs
 
 INCLUDEPATH += $$PWD/include
+win32:CONFIG(debug, debug|release): {
+    LIBS += -L$$PWD/libs/ -ldebug_library_name
+} else:win32:CONFIG(release, debug|release): {
+    LIBS += $$PWD/libs/glog.lib
+}
 
 SOURCES += \
     src/addquestion.cpp \
